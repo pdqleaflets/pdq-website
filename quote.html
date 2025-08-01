@@ -795,7 +795,7 @@
         <div class="calculator-section">
             <div class="calculator-header">
                 <h1>Get Your Instant Quote</h1>
-                <p><b>EXPERIMENTAL FEATURE - Prices shown are not guaranteed.</b></p>
+                <p><b>EXPERIMENTAL FEATURE - Pricing is NOT guaranteed. This tool is under construction. Please call us for a quote 01752 546 123.</b></p>
                 <p>Configure your leaflet campaign below to see real-time pricing for distribution, design, and printing services.</p>
             </div>
 
@@ -1077,7 +1077,7 @@
 
             <div class="guarantee-text">
                 🛡️ <strong>100% Money-Back Guarantee</strong><br>
-                GPS tracked delivery with photographic proof included
+                We'll provide full delivery tracking, or your money back.
             </div>
         </div>
     </div>
@@ -1221,7 +1221,10 @@
             } else {
                 singleSection.style.display = 'block';
                 multiSection.style.display = 'none';
+                
+                // Clear both the array AND the DOM elements
                 multiAreas = [];
+                document.getElementById('multi-area-list').innerHTML = '';
                 
                 // Recalculate for single area mode
                 calculatePrice();
@@ -1865,4 +1868,3 @@ Generated from PDQ Leaflets Quote Calculator`;
     </script>
 </body>
 </html>
-                
