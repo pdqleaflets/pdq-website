@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Calculator - PDQ Leaflets | Plymouth, UK</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1d1d1f;
+            background: #f8fafc;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2563eb;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .back-link {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #2563eb;
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .calculator-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .calculator-header {
+            margin-bottom: 40px;
+        }
+
+        .calculator-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .calculator-header p {
+            color: #64748b;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* Quick Options */
+        .quick-options {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f1f5f9;
+            border-radius: 12px;
+        }
+
+        .quick-options h4 {
+            margin-bottom: 15px;
+            color: #374151;
+        }
+
+        .quick-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: end;
+        }
+
+        .quick-controls .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quick-controls label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+
+        .quick-controls select {
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            width: 100%;
+            background: white;
+        }
+
+        .cheapest-btn {
+            background: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 2;
+            height: 46px;
+        }
+
+        .cheapest-btn:hover {
+            background: #059669;
+        }
+
+        /* Form Styling */
+        .form-section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #374151;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #374151;
+            font-size: 0.95rem;
+        }
+
+        .form-group select {
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input[type="number"] {
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input[type="number"]:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .quick-controls input[type="number"] {
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            width: 100%;
+            background: white;
+            font-size: 1rem;
+        }
+
+        .quick-controls input[type="number"]:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .area-row input[type="number"] {
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        .area-row input[type="number"]:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Postcode Buttons */
+        .postcode-section {
+            margin-bottom: 20px;
+        }
+
+        .postcode-area {
+            margin-bottom: 15px;
+        }
+
+        .postcode-area h5 {
+            font-size: 0.9rem;
+            color: #374151;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .postcode-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .postcode-btn {
+            padding: 16px 12px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+
+        .postcode-btn:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+            transform: translateY(-1px);
+        }
+
+        .postcode-btn.standard {
+            border-left: 5px solid #10b981;
+        }
+
+        .postcode-btn.premium {
+            border-left: 5px solid #f59e0b;
+        }
+
+        .postcode-btn.extended {
+            border-left: 5px solid #8b5cf6;
+        }
+
+        .postcode-btn.selected {
+            border-color: #2563eb;
+            background: #2563eb;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .area-legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .legend-standard {
+            background: #10b981;
+        }
+
+        .legend-premium {
+            background: #f59e0b;
+        }
+
+        .legend-extended {
+            background: #8b5cf6;
+        }
+
+        .postcode-btn small {
+            font-size: 0.7rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        .extended-area-section {
+            margin-bottom: 15px;
+        }
+
+        .extended-area-section label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 0.9rem;
+            display: block;
+        }
+
+        .extended-area-section select {
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            width: 100%;
+            background: white;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .info-text {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .area-indicator {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 12px;
+            display: inline-block;
+        }
+
+        .area-standard {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .area-premium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .area-extended {
+            background: #ede9fe;
+            color: #6b21a8;
+        }
+
+        /* Service Options */
+        .service-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .service-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: white;
+        }
+
+        .service-card.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .service-card h4 {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .service-card p {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .service-price {
+            font-weight: 700;
+            color: #2563eb;
+            font-size: 1.1rem;
+        }
+
+        /* Multi-area specific styles */
+        .multi-area-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .multi-area-list {
+            margin-top: 20px;
+        }
+
+        .area-row {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+            padding: 15px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .area-row .form-group {
+            margin: 0;
+        }
+
+        .area-row select {
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        .area-price {
+            font-weight: 600;
+            color: #2563eb;
+            text-align: right;
+            align-self: center;
+        }
+
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            align-self: center;
+        }
+
+        .remove-btn:hover {
+            background: #dc2626;
+        }
+
+        .add-area-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .add-area-btn:hover {
+            background: #059669;
+        }
+
+        .multi-total {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eff6ff;
+            border-radius: 8px;
+            border: 2px solid #2563eb;
+        }
+
+        .total-breakdown {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        /* Quote Summary Sidebar */
+        .quote-summary {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .quote-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .quote-total {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+
+        .quote-vat {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .quote-breakdown {
+            margin: 30px 0;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .breakdown-label {
+            color: #374151;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .discount-badge {
+            background: #10b981;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .cta-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #2563eb;
+            padding: 12px 24px;
+            border: 2px solid #2563eb;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .btn-secondary:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .guarantee-text {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+            padding: 16px;
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+
+        .warning-message {
+            margin-top: 15px;
+            padding: 12px;
+            background: #fef3c7;
+            border-radius: 8px;
+            color: #92400e;
+            font-weight: 500;
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .quote-summary {
+                position: static;
+                order: -1;
+                top: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px 15px;
+            }
+
+            .calculator-section {
+                padding: 30px 20px;
+            }
+
+            .calculator-header h1 {
+                font-size: 2rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quote-total {
+                font-size: 2rem;
+            }
+
+            .postcode-buttons {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .postcode-btn {
+                padding: 12px 8px;
+                font-size: 0.85rem;
+            }
+
+            .postcode-btn small {
+                font-size: 0.6rem;
+            }
+
+            .service-options {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .quick-controls .form-group {
+                margin-bottom: 10px;
+            }
+
+            .cheapest-btn {
+                height: auto;
+                padding: 12px 24px;
+            }
+
+            .area-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .area-price {
+                text-align: left;
+            }
+
+            .area-legend {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .postcode-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .nav-container {
+                padding: 0 15px;
+            }
+            
+            .logo {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">PDQ LEAFLETS</a>
+            <a href="index.html" class="back-link">
+                ← Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Calculator Form -->
+        <div class="calculator-section">
+            <div class="calculator-header">
+                <h1>Get Your Instant Quote</h1>
+                <p>Configure your leaflet campaign below to see real-time pricing for distribution, design, and printing services.</p>
+            </div>
+
+            <!-- Quick Options -->
+            <div class="quick-options">
+                <h4>⚡ Quick Start</h4>
+                <div class="quick-controls">
+                    <div class="form-group">
+                        <label for="quick-quantity">Quantity</label>
+                        <input type="number" id="quick-quantity" min="1" step="1" placeholder="Enter quantity (min 1,000)" value="1000">
+                    </div>
+                    <button class="cheapest-btn" onclick="setCheapestOption()">
+                        💰 Show Best Value
+                    </button>
+                </div>
+                <div style="font-size: 0.85rem; color: #64748b;">
+                    Enter any quantity - automatically rounds up to nearest 1,000
+                </div>
+            </div>
+
+            <!-- Distribution Settings -->
+            <div class="form-section">
+                <h3 class="section-title">📍 Distribution Details</h3>
+                
+                <div class="multi-area-toggle">
+                    <input type="checkbox" id="multi-area-mode">
+                    <label for="multi-area-mode" style="margin: 0; font-weight: 600;">Split delivery across multiple areas</label>
+                </div>
+                
+                <div id="single-area-section">
+                    <div class="postcode-section">
+                        <label style="font-weight: 600; margin-bottom: 12px; color: #374151; font-size: 0.95rem; display: block;">Delivery Area</label>
+                        
+                        <div class="postcode-area">
+                            <h5>Main Areas</h5>
+                            <div class="postcode-buttons">
+                                <button class="postcode-btn standard" onclick="setPostcode('PL2')">PL2</button>
+                                <button class="postcode-btn standard" onclick="setPostcode('PL5')">PL5</button>
+                                <button class="postcode-btn standard" onclick="setPostcode('PL6')">PL6</button>
+                                <button class="postcode-btn standard" onclick="setPostcode('PL7')">PL7</button>
+                                <button class="postcode-btn standard" onclick="setPostcode('PL9')">PL9</button>
+                                <button class="postcode-btn premium" onclick="setPostcode('PL1')">PL1</button>
+                                <button class="postcode-btn premium" onclick="setPostcode('PL3')">PL3</button>
+                                <button class="postcode-btn premium" onclick="setPostcode('PL4')">PL4</button>
+                                <button class="postcode-btn premium" onclick="setPostcode('PL8')">PL8</button>
+                            </div>
+                        </div>
+                        
+                        <div class="extended-area-section">
+                            <label for="extended-areas">Extended Areas (+£8 per 1,000)</label>
+                            <select id="extended-areas">
+                                <option value="">Select extended area...</option>
+                                <option value="PL12">PL12 - Saltash</option>
+                                <option value="PL21">PL21 - Ivybridge</option>
+                                <option value="TQ7">TQ7 - Kingsbridge</option>
+                                <option value="TQ9">TQ9 - Dartmouth</option>
+                                <option value="PL13">PL13 - Looe</option>
+                                <option value="PL14">PL14 - Liskeard</option>
+                                <option value="PL15">PL15 - Launceston</option>
+                                <option value="PL19">PL19 - Tavistock</option>
+                                <option value="PL20">PL20 - Yelverton</option>
+                                <option value="TQ1">TQ1 - Torquay</option>
+                                <option value="TQ2">TQ2 - Babbacombe</option>
+                                <option value="TQ3">TQ3 - Paignton</option>
+                                <option value="TQ8">TQ8 - Salcombe</option>
+                            </select>
+                        </div>
+                        
+                        <div class="area-legend">
+                            <div class="legend-item">
+                                <div class="legend-color legend-standard"></div>
+                                <span>Standard Areas</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color legend-premium"></div>
+                                <span>Premium Areas</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color legend-extended"></div>
+                                <span>Extended Areas (+£8)</span>
+                            </div>
+                        </div>
+                        <div id="area-indicator"></div>
+                    </div>
+
+                    <div class="form-grid" style="margin-top: 30px;">
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" id="quantity" min="1" step="1" placeholder="Enter quantity (min 1,000)" value="1000">
+                            <div class="info-text">Higher quantities = better per-leaflet pricing</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="delivery-type">Delivery Type</label>
+                            <select id="delivery-type">
+                                <option value="standard">Standard Delivery</option>
+                                <option value="solus">Solus Delivery (Exclusive)</option>
+                            </select>
+                            <div class="info-text">Solus = your leaflets delivered alone</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="multi-area-section" style="display: none;">
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-weight: 600; margin-bottom: 8px; color: #374151; font-size: 0.95rem; display: block;">Delivery Type (applies to all areas)</label>
+                        <select id="multi-delivery-type">
+                            <option value="standard">Standard Delivery</option>
+                            <option value="solus">Solus Delivery (Exclusive)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="multi-area-list" id="multi-area-list">
+                        <!-- Areas will be added here dynamically -->
+                    </div>
+                    
+                    <button class="add-area-btn" onclick="addArea()">+ Add Area</button>
+                    
+                    <div id="multi-area-total" class="multi-total" style="display: none;">
+                        <div class="total-breakdown">
+                            <span>Total Leaflets:</span>
+                            <span id="total-leaflets">0</span>
+                        </div>
+                        <div class="total-breakdown">
+                            <span>Distribution Total:</span>
+                            <span id="multi-distribution-total">£0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Design Services -->
+            <div class="form-section">
+                <h3 class="section-title">🎨 Design Services (Optional)</h3>
+                <div class="service-options">
+                    <div class="service-card selected" id="design-none" onclick="selectDesign('none')">
+                        <h4>No Design Needed</h4>
+                        <p>I already have my design ready</p>
+                        <div class="service-price">£0</div>
+                    </div>
+                    <div class="service-card" id="design-single" onclick="selectDesign('single')">
+                        <h4>Single-Sided Design</h4>
+                        <p>Professional design (one side)</p>
+                        <div class="service-price">£50</div>
+                    </div>
+                    <div class="service-card" id="design-double" onclick="selectDesign('double')">
+                        <h4>Double-Sided Design</h4>
+                        <p>Professional design (both sides)</p>
+                        <div class="service-price">£75</div>
+                    </div>
+                    <div class="service-card" id="design-bifold" onclick="selectDesign('bifold')">
+                        <h4>Bi-Fold Design</h4>
+                        <p>4-panel folded leaflet design</p>
+                        <div class="service-price">£90</div>
+                    </div>
+                </div>
+                
+                <div class="checkbox-group" id="source-files-option" style="display: none; margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid #e5e7eb;">
+                    <input type="checkbox" id="source-files">
+                    <label for="source-files"><strong>Add source files (+£25)</strong> - Get editable design files</label>
+                </div>
+            </div>
+
+            <!-- Printing Services -->
+            <div class="form-section">
+                <h3 class="section-title">🖨️ Printing Services (Optional)</h3>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="include-printing">
+                    <label for="include-printing">Include professional printing</label>
+                </div>
+                <div class="info-text">We only offer printing for leaflets we distribute</div>
+
+                <div id="printing-options" style="margin-top: 20px; display: none;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="paper-size">Paper Size</label>
+                            <select id="paper-size">
+                                <option value="">Select size...</option>
+                                <option value="A6">A6 (105 × 148mm) - Compact</option>
+                                <option value="A5">A5 (148 × 210mm) - Popular</option>
+                                <option value="A4">A4 (210 × 297mm) - Large</option>
+                                <option value="DL">DL (99 × 210mm) - Slim</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="paper-stock">Paper Quality</label>
+                            <select id="paper-stock">
+                                <option value="">Select quality...</option>
+                                <option value="budget">Budget (130gsm)</option>
+                                <option value="standard">Standard (170gsm)</option>
+                                <option value="premium">Premium (250gsm)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="paper-finish">Paper Finish</label>
+                            <select id="paper-finish">
+                                <option value="">Select finish...</option>
+                                <option value="matte">Matte</option>
+                                <option value="gloss">Gloss</option>
+                                <option value="uncoated">Uncoated</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="print-sides">Print Sides</label>
+                            <select id="print-sides">
+                                <option value="">Select sides...</option>
+                                <option value="single">Single Sided</option>
+                                <option value="double">Double Sided</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="printing-incomplete" class="warning-message">
+                        ⚠️ Please complete all printing options to see price
+                    </div>
+                </div>
+            </div>
+
+            <!-- Discounts -->
+            <div class="form-section">
+                <h3 class="section-title">💰 Available Discounts</h3>
+                <div class="info-text" style="margin-bottom: 15px;">Discounts apply to distribution costs only</div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="new-customer">
+                    <label for="new-customer">New customer discount (-15%)</label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="annual-contract">
+                    <label for="annual-contract">Annual contract (-12%)</label>
+                </div>
+                <div class="info-text">Annual contract requires minimum 5k leaflets/month</div>
+            </div>
+        </div>
+
+        <!-- Quote Summary -->
+        <div class="quote-summary">
+            <div class="quote-header">
+                <div class="quote-total" id="quote-total">£58.00</div>
+                <div class="quote-vat" id="quote-vat">£69.60 inc. VAT</div>
+            </div>
+
+            <div class="quote-breakdown">
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Distribution</span>
+                    <span class="breakdown-value" id="distribution-cost">£58.00</span>
+                </div>
+                <div class="breakdown-item" id="design-breakdown" style="display: none;">
+                    <span class="breakdown-label">Design</span>
+                    <span class="breakdown-value" id="design-cost">£0.00</span>
+                </div>
+                <div class="breakdown-item" id="printing-breakdown" style="display: none;">
+                    <span class="breakdown-label">Printing</span>
+                    <span class="breakdown-value" id="printing-cost">£0.00</span>
+                </div>
+                <div class="breakdown-item" id="discount-breakdown" style="display: none;">
+                    <span class="breakdown-label">Discount <span class="discount-badge" id="discount-badge"></span></span>
+                    <span class="breakdown-value" id="discount-amount">-£0.00</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Total (ex. VAT)</span>
+                    <span class="breakdown-value" id="total-ex-vat">£58.00</span>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <button class="btn-primary" onclick="requestQuote()">
+                    Request To Book
+                </button>
+                <a href="tel:01752546123" class="btn-secondary">
+                    Call: 01752 546 123
+                </a>
+            </div>
+
+            <div class="guarantee-text">
+                🛡️ <strong>100% Money-Back Guarantee</strong><br>
+                GPS tracked delivery with photographic proof included
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pricing data
+        const pricingData = {
+            standard: {
+                standard: { '1-4k': 58, '5-9k': 55, '10-24k': 51, '25-49k': 47, '50k+': 44 },
+                solus: { '1-4k': 130, '5-9k': 125, '10-24k': 118, '25-49k': 112, '50k+': 108 }
+            },
+            premium: {
+                standard: { '1-4k': 85, '5-9k': 80, '10-24k': 75, '25-49k': 70, '50k+': 65 },
+                solus: { '1-4k': 185, '5-9k': 178, '10-24k': 170, '25-49k': 162, '50k+': 155 }
+            }
+        };
+
+        // Printing prices
+        const printingPrices = {
+            A6: { budget: { 1000: 15, 2000: 25, 5000: 45, 10000: 75, 25000: 150, 50000: 280 },
+                  standard: { 1000: 20, 2000: 32, 5000: 58, 10000: 95, 25000: 190, 50000: 350 },
+                  premium: { 1000: 28, 2000: 45, 5000: 78, 10000: 125, 25000: 250, 50000: 450 } },
+            A5: { budget: { 1000: 18, 2000: 30, 5000: 52, 10000: 85, 25000: 170, 50000: 320 },
+                  standard: { 1000: 25, 2000: 40, 5000: 68, 10000: 110, 25000: 220, 50000: 400 },
+                  premium: { 1000: 35, 2000: 55, 5000: 92, 10000: 150, 25000: 300, 50000: 550 } },
+            A4: { budget: { 1000: 25, 2000: 42, 5000: 72, 10000: 115, 25000: 230, 50000: 420 },
+                  standard: { 1000: 35, 2000: 58, 5000: 95, 10000: 155, 25000: 310, 50000: 560 },
+                  premium: { 1000: 48, 2000: 78, 5000: 125, 10000: 200, 25000: 400, 50000: 720 } },
+            DL: { budget: { 1000: 16, 2000: 28, 5000: 48, 10000: 78, 25000: 155, 50000: 290 },
+                  standard: { 1000: 22, 2000: 36, 5000: 62, 10000: 100, 25000: 200, 50000: 380 },
+                  premium: { 1000: 32, 2000: 50, 5000: 85, 10000: 135, 25000: 270, 50000: 500 } }
+        };
+
+        const standardAreas = ['PL2', 'PL5', 'PL6', 'PL7', 'PL9'];
+        const premiumAreas = ['PL1', 'PL3', 'PL4', 'PL8'];
+        const extendedStandard = ['PL12', 'PL21', 'TQ7', 'TQ9'];
+        const extendedPremium = ['PL13', 'PL14', 'PL15', 'PL19', 'PL20', 'TQ1', 'TQ2', 'TQ3', 'TQ8'];
+
+        let currentDesign = 'none';
+        let selectedArea = 'PL2';
+        let isMultiArea = false;
+        let multiAreas = [];
+
+        function getAreaType(areaCode) {
+            if (standardAreas.includes(areaCode)) return 'standard';
+            if (premiumAreas.includes(areaCode)) return 'premium';
+            if (extendedStandard.includes(areaCode)) return 'standard-extended';
+            if (extendedPremium.includes(areaCode)) return 'premium-extended';
+            return null;
+        }
+
+        function getQuantityTier(quantity) {
+            if (quantity >= 50000) return '50k+';
+            if (quantity >= 25000) return '25-49k';
+            if (quantity >= 10000) return '10-24k';
+            if (quantity >= 5000) return '5-9k';
+            return '1-4k';
+        }
+
+        function getPrintingPrice(quantity, size, stock, doubleSided) {
+            if (!size || !stock) return 0;
+            
+            const quantities = [1000, 2000, 5000, 10000, 25000, 50000];
+            let closestQty = quantities.reduce((prev, curr) => 
+                Math.abs(curr - quantity) < Math.abs(prev - quantity) ? curr : prev
+            );
+            
+            let basePrice = printingPrices[size]?.[stock]?.[closestQty] || 0;
+            
+            // Scale for exact quantity with economies of scale
+            if (quantity !== closestQty && basePrice > 0) {
+                const ratio = quantity / closestQty;
+                const scalingFactor = ratio > 1 ? Math.pow(ratio, 0.85) : ratio;
+                basePrice = basePrice * scalingFactor;
+            }
+            
+            if (doubleSided) {
+                basePrice *= 1.3;
+            }
+            
+            return Math.round(basePrice);
+        }
+
+        function validateQuantity(value) {
+            // Convert to number and handle invalid inputs
+            const num = parseInt(value) || 0;
+            
+            // Return minimum 1000 if input is invalid or too small
+            if (num < 1000) {
+                return 1000;
+            }
+            
+            // Round up to nearest 1000
+            return Math.ceil(num / 1000) * 1000;
+        }
+
+        function setPostcode(areaCode) {
+            selectedArea = areaCode;
+            
+            // Clear all selections
+            document.querySelectorAll('.postcode-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Clear extended areas dropdown
+            document.getElementById('extended-areas').value = '';
+            
+            // Set the clicked button as selected
+            event.target.classList.add('selected');
+            
+            calculatePrice();
+        }
+
+        function setExtendedArea() {
+            const dropdown = document.getElementById('extended-areas');
+            if (dropdown.value) {
+                selectedArea = dropdown.value;
+                
+                // Clear all postcode button selections
+                document.querySelectorAll('.postcode-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                
+                calculatePrice();
+            }
+        }
+
+        function toggleMultiArea() {
+            isMultiArea = document.getElementById('multi-area-mode').checked;
+            
+            const singleSection = document.getElementById('single-area-section');
+            const multiSection = document.getElementById('multi-area-section');
+            
+            if (isMultiArea) {
+                singleSection.style.display = 'none';
+                multiSection.style.display = 'block';
+                
+                if (multiAreas.length === 0) {
+                    addArea();
+                }
+            } else {
+                singleSection.style.display = 'block';
+                multiSection.style.display = 'none';
+                multiAreas = [];
+                
+                // Recalculate for single area mode
+                calculatePrice();
+            }
+        }
+
+        function createAreaOptions() {
+            const mainAreas = [
+                { code: 'PL1', name: 'PL1', type: 'premium' },
+                { code: 'PL2', name: 'PL2', type: 'standard' },
+                { code: 'PL3', name: 'PL3', type: 'premium' },
+                { code: 'PL4', name: 'PL4', type: 'premium' },
+                { code: 'PL5', name: 'PL5', type: 'standard' },
+                { code: 'PL6', name: 'PL6', type: 'standard' },
+                { code: 'PL7', name: 'PL7', type: 'standard' },
+                { code: 'PL8', name: 'PL8', type: 'premium' },
+                { code: 'PL9', name: 'PL9', type: 'standard' }
+            ];
+            
+            const extendedAreas = [
+                { code: 'PL12', name: 'PL12 - Saltash', type: 'standard-extended' },
+                { code: 'PL21', name: 'PL21 - Ivybridge', type: 'standard-extended' },
+                { code: 'TQ7', name: 'TQ7 - Kingsbridge', type: 'standard-extended' },
+                { code: 'TQ9', name: 'TQ9 - Dartmouth', type: 'standard-extended' },
+                { code: 'PL13', name: 'PL13 - Looe', type: 'premium-extended' },
+                { code: 'PL14', name: 'PL14 - Liskeard', type: 'premium-extended' },
+                { code: 'PL15', name: 'PL15 - Launceston', type: 'premium-extended' },
+                { code: 'PL19', name: 'PL19 - Tavistock', type: 'premium-extended' },
+                { code: 'PL20', name: 'PL20 - Yelverton', type: 'premium-extended' },
+                { code: 'TQ1', name: 'TQ1 - Torquay', type: 'premium-extended' },
+                { code: 'TQ2', name: 'TQ2 - Babbacombe', type: 'premium-extended' },
+                { code: 'TQ3', name: 'TQ3 - Paignton', type: 'premium-extended' },
+                { code: 'TQ8', name: 'TQ8 - Salcombe', type: 'premium-extended' }
+            ];
+            
+            let options = '<option value="">Select area...</option>';
+            
+            options += '<optgroup label="Main Areas">';
+            mainAreas.forEach(area => {
+                options += `<option value="${area.code}">${area.name}</option>`;
+            });
+            options += '</optgroup>';
+            
+            options += '<optgroup label="Extended Areas (+£8/1k)">';
+            extendedAreas.forEach(area => {
+                options += `<option value="${area.code}">${area.name}</option>`;
+            });
+            options += '</optgroup>';
+            
+            return options;
+        }
+
+        function addArea() {
+            const areaId = 'area_' + Date.now();
+            const areaRow = document.createElement('div');
+            areaRow.className = 'area-row';
+            areaRow.id = areaId;
+            
+            areaRow.innerHTML = `
+                <div class="form-group">
+                    <label>Area</label>
+                    <select onchange="updateMultiArea('${areaId}')">
+                        ${createAreaOptions()}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" min="1" step="1" placeholder="Enter quantity (min 1,000)" value="1000" onchange="updateMultiArea('${areaId}')" onblur="updateMultiArea('${areaId}')">
+                </div>
+                <div class="area-price" id="price_${areaId}">
+                    £0.00
+                </div>
+                <div>
+                    <button class="remove-btn" onclick="removeArea('${areaId}')">Remove</button>
+                </div>
+            `;
+            
+            document.getElementById('multi-area-list').appendChild(areaRow);
+            
+            multiAreas.push({
+                id: areaId,
+                area: '',
+                quantity: 1000,
+                price: 0
+            });
+        }
+
+        function removeArea(areaId) {
+            document.getElementById(areaId).remove();
+            multiAreas = multiAreas.filter(area => area.id !== areaId);
+            updateMultiAreaTotal();
+        }
+
+        function updateMultiArea(areaId) {
+            const row = document.getElementById(areaId);
+            const selects = row.querySelectorAll('select');
+            const inputs = row.querySelectorAll('input[type="number"]');
+            const area = selects[0].value;
+            
+            // Validate and process quantity
+            const inputValue = inputs[0].value;
+            const quantity = validateQuantity(inputValue);
+            inputs[0].value = quantity;
+            
+            const areaIndex = multiAreas.findIndex(a => a.id === areaId);
+            if (areaIndex !== -1) {
+                multiAreas[areaIndex].area = area;
+                multiAreas[areaIndex].quantity = quantity;
+                
+                if (area && quantity > 0) {
+                    const deliveryType = document.getElementById('multi-delivery-type').value;
+                    const areaType = getAreaType(area);
+                    const isExtended = areaType && areaType.includes('extended');
+                    const baseAreaType = areaType ? areaType.replace('-extended', '') : 'standard';
+                    const quantityTier = getQuantityTier(quantity);
+                    
+                    let distributionPrice = pricingData[baseAreaType][deliveryType][quantityTier];
+                    if (isExtended) {
+                        distributionPrice += 8;
+                    }
+                    
+                    const areaTotal = (distributionPrice * quantity / 1000);
+                    multiAreas[areaIndex].price = areaTotal;
+                    
+                    document.getElementById(`price_${areaId}`).textContent = `£${areaTotal.toFixed(2)}`;
+                } else {
+                    multiAreas[areaIndex].price = 0;
+                    document.getElementById(`price_${areaId}`).textContent = `£0.00`;
+                }
+            }
+            
+            updateMultiAreaTotal();
+        }
+
+        function updateMultiAreaTotal() {
+            const totalLeaflets = multiAreas.reduce((sum, area) => sum + area.quantity, 0);
+            const totalPrice = multiAreas.reduce((sum, area) => sum + area.price, 0);
+            
+            document.getElementById('total-leaflets').textContent = totalLeaflets.toLocaleString();
+            document.getElementById('multi-distribution-total').textContent = `£${totalPrice.toFixed(2)}`;
+            
+            const totalSection = document.getElementById('multi-area-total');
+            if (totalLeaflets > 0) {
+                totalSection.style.display = 'block';
+            } else {
+                totalSection.style.display = 'none';
+            }
+            
+            if (isMultiArea) {
+                calculateMultiAreaPrice(totalPrice);
+            }
+        }
+
+        function calculateMultiAreaPrice(distributionTotal) {
+            // Calculate design cost
+            let designCost = 0;
+            const includeSourceFiles = document.getElementById('source-files').checked;
+            if (currentDesign === 'single') designCost = 50;
+            if (currentDesign === 'double') designCost = 75;
+            if (currentDesign === 'bifold') designCost = 90;
+            if (includeSourceFiles && currentDesign !== 'none') designCost += 25;
+
+            // Calculate printing cost
+            let printingCost = 0;
+            const includePrinting = document.getElementById('include-printing').checked;
+            let printingComplete = isPrintingComplete();
+            
+            if (includePrinting && printingComplete) {
+                const totalQuantity = multiAreas.reduce((sum, area) => sum + area.quantity, 0);
+                const paperSize = document.getElementById('paper-size').value;
+                const paperStock = document.getElementById('paper-stock').value;
+                const doubleSided = document.getElementById('print-sides').value === 'double';
+                printingCost = getPrintingPrice(totalQuantity, paperSize, paperStock, doubleSided);
+            }
+
+            // Show/hide printing incomplete warning
+            const incompleteWarning = document.getElementById('printing-incomplete');
+            if (includePrinting && !printingComplete) {
+                incompleteWarning.style.display = 'block';
+            } else {
+                incompleteWarning.style.display = 'none';
+            }
+
+            // Apply discounts (ONLY to distribution)
+            const newCustomer = document.getElementById('new-customer').checked;
+            const annualContract = document.getElementById('annual-contract').checked;
+            
+            let discountAmount = 0;
+            let discountPercent = 0;
+            let discountLabel = '';
+
+            if (newCustomer && annualContract) {
+                discountPercent = 25;
+                discountLabel = '25%';
+            } else if (newCustomer) {
+                discountPercent = 15;
+                discountLabel = '15%';
+            } else if (annualContract) {
+                discountPercent = 12;
+                discountLabel = '12%';
+            }
+
+            if (discountPercent > 0) {
+                discountAmount = distributionTotal * (discountPercent / 100);
+            }
+
+            const discountedDistribution = distributionTotal - discountAmount;
+            const finalTotal = discountedDistribution + designCost + printingCost;
+            const totalWithVAT = finalTotal * 1.2;
+
+            // Update UI
+            updateBreakdownDisplay(distributionTotal, designCost, printingCost, printingComplete, discountAmount, discountLabel, finalTotal, totalWithVAT);
+        }
+
+        function setCheapestOption() {
+            const quickQuantityInput = document.getElementById('quick-quantity');
+            let quickQuantity = validateQuantity(quickQuantityInput.value);
+            quickQuantityInput.value = quickQuantity;
+            
+            // Set to cheapest area (PL2 - standard)
+            selectedArea = 'PL2';
+            
+            // Update form values
+            document.getElementById('quantity').value = quickQuantity;
+            document.getElementById('delivery-type').value = 'standard';
+            
+            // Clear postcode selections and select PL2
+            document.querySelectorAll('.postcode-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector('[onclick="setPostcode(\'PL2\')"]').classList.add('selected');
+            
+            // Clear extended areas
+            document.getElementById('extended-areas').value = '';
+            
+            // Set to no design
+            selectDesign('none');
+            
+            // Disable printing
+            document.getElementById('include-printing').checked = false;
+            togglePrintingOptions();
+            
+            // Apply new customer discount
+            document.getElementById('new-customer').checked = true;
+            document.getElementById('annual-contract').checked = false;
+            
+            // Disable multi-area mode
+            document.getElementById('multi-area-mode').checked = false;
+            toggleMultiArea();
+            
+            calculatePrice();
+        }
+
+        function selectDesign(type) {
+            currentDesign = type;
+            
+            // Update design card selections
+            document.querySelectorAll('#design-none, #design-single, #design-double, #design-bifold').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.getElementById('design-' + type).classList.add('selected');
+            
+            // Show/hide source files option
+            const sourceFilesOption = document.getElementById('source-files-option');
+            if (type !== 'none') {
+                sourceFilesOption.style.display = 'flex';
+            } else {
+                sourceFilesOption.style.display = 'none';
+                document.getElementById('source-files').checked = false;
+            }
+            
+            calculatePrice();
+        }
+
+        function togglePrintingOptions() {
+            const checkbox = document.getElementById('include-printing');
+            const options = document.getElementById('printing-options');
+            options.style.display = checkbox.checked ? 'block' : 'none';
+            
+            if (!checkbox.checked) {
+                // Reset printing options when disabled
+                document.getElementById('paper-size').value = '';
+                document.getElementById('paper-stock').value = '';
+                document.getElementById('paper-finish').value = '';
+                document.getElementById('print-sides').value = '';
+            }
+            
+            calculatePrice();
+        }
+
+        function isPrintingComplete() {
+            if (!document.getElementById('include-printing').checked) return true;
+            
+            return document.getElementById('paper-size').value !== '' &&
+                   document.getElementById('paper-stock').value !== '' &&
+                   document.getElementById('paper-finish').value !== '' &&
+                   document.getElementById('print-sides').value !== '';
+        }
+
+        function updateAreaIndicator(areaType) {
+            const indicator = document.getElementById('area-indicator');
+            if (!areaType) {
+                indicator.innerHTML = '';
+                return;
+            }
+
+            let className, text;
+            switch(areaType) {
+                case 'standard':
+                    className = 'area-standard';
+                    text = 'Standard Area';
+                    break;
+                case 'premium':
+                    className = 'area-premium';
+                    text = 'Premium Area';
+                    break;
+                case 'standard-extended':
+                    className = 'area-extended';
+                    text = 'Standard Area + £8 Extended';
+                    break;
+                case 'premium-extended':
+                    className = 'area-extended';
+                    text = 'Premium Area + £8 Extended';
+                    break;
+            }
+            indicator.innerHTML = `<div class="area-indicator ${className}">${text}</div>`;
+        }
+
+        function updateBreakdownDisplay(distributionTotal, designCost, printingCost, printingComplete, discountAmount, discountLabel, finalTotal, totalWithVAT) {
+            document.getElementById('distribution-cost').textContent = `£${distributionTotal.toFixed(2)}`;
+            
+            // Design breakdown
+            const designBreakdown = document.getElementById('design-breakdown');
+            if (designCost > 0) {
+                designBreakdown.style.display = 'flex';
+                document.getElementById('design-cost').textContent = `£${designCost.toFixed(2)}`;
+            } else {
+                designBreakdown.style.display = 'none';
+            }
+
+            // Printing breakdown
+            const printingBreakdown = document.getElementById('printing-breakdown');
+            if (printingCost > 0 && printingComplete) {
+                printingBreakdown.style.display = 'flex';
+                document.getElementById('printing-cost').textContent = `£${printingCost.toFixed(2)}`;
+            } else {
+                printingBreakdown.style.display = 'none';
+            }
+
+            // Discount breakdown
+            const discountBreakdown = document.getElementById('discount-breakdown');
+            if (discountAmount > 0) {
+                discountBreakdown.style.display = 'flex';
+                document.getElementById('discount-amount').textContent = `-£${discountAmount.toFixed(2)}`;
+                document.getElementById('discount-badge').textContent = discountLabel;
+            } else {
+                discountBreakdown.style.display = 'none';
+            }
+
+            // Totals
+            document.getElementById('total-ex-vat').textContent = `£${finalTotal.toFixed(2)}`;
+            document.getElementById('quote-total').textContent = `£${finalTotal.toFixed(2)}`;
+            document.getElementById('quote-vat').textContent = `£${totalWithVAT.toFixed(2)} inc. VAT`;
+        }
+
+        function calculatePrice() {
+            // Skip calculation if in multi-area mode
+            if (isMultiArea) return;
+            
+            // Get and validate quantity
+            const quantityInput = document.getElementById('quantity');
+            const quantity = validateQuantity(quantityInput.value);
+            quantityInput.value = quantity;
+            
+            const deliveryType = document.getElementById('delivery-type').value;
+            const includePrinting = document.getElementById('include-printing').checked;
+            const newCustomer = document.getElementById('new-customer').checked;
+            const annualContract = document.getElementById('annual-contract').checked;
+            const includeSourceFiles = document.getElementById('source-files').checked;
+
+            const areaType = getAreaType(selectedArea);
+            updateAreaIndicator(areaType);
+
+            // Calculate distribution cost
+            const isExtended = areaType && areaType.includes('extended');
+            const baseAreaType = areaType ? areaType.replace('-extended', '') : 'standard';
+            const quantityTier = getQuantityTier(quantity);
+
+            let distributionPrice = pricingData[baseAreaType][deliveryType][quantityTier];
+            if (isExtended) {
+                distributionPrice += 8;
+            }
+
+            const distributionTotal = (distributionPrice * quantity / 1000);
+
+            // Calculate design cost
+            let designCost = 0;
+            if (currentDesign === 'single') designCost = 50;
+            if (currentDesign === 'double') designCost = 75;
+            if (currentDesign === 'bifold') designCost = 90;
+            if (includeSourceFiles && currentDesign !== 'none') designCost += 25;
+
+            // Calculate printing cost
+            let printingCost = 0;
+            let printingComplete = isPrintingComplete();
+            
+            if (includePrinting && printingComplete) {
+                const paperSize = document.getElementById('paper-size').value;
+                const paperStock = document.getElementById('paper-stock').value;
+                const doubleSided = document.getElementById('print-sides').value === 'double';
+                printingCost = getPrintingPrice(quantity, paperSize, paperStock, doubleSided);
+            }
+
+            // Show/hide printing incomplete warning
+            const incompleteWarning = document.getElementById('printing-incomplete');
+            if (includePrinting && !printingComplete) {
+                incompleteWarning.style.display = 'block';
+            } else {
+                incompleteWarning.style.display = 'none';
+            }
+
+            // Apply discounts (ONLY to distribution)
+            let discountAmount = 0;
+            let discountPercent = 0;
+            let discountLabel = '';
+
+            if (newCustomer && annualContract) {
+                discountPercent = 25; // Combined discount
+                discountLabel = '25%';
+            } else if (newCustomer) {
+                discountPercent = 15;
+                discountLabel = '15%';
+            } else if (annualContract) {
+                discountPercent = 12;
+                discountLabel = '12%';
+            }
+
+            if (discountPercent > 0) {
+                discountAmount = distributionTotal * (discountPercent / 100);
+            }
+
+            const discountedDistribution = distributionTotal - discountAmount;
+            const finalTotal = discountedDistribution + designCost + printingCost;
+            const totalWithVAT = finalTotal * 1.2;
+
+            // Update UI
+            updateBreakdownDisplay(distributionTotal, designCost, printingCost, printingComplete, discountAmount, discountLabel, finalTotal, totalWithVAT);
+        }
+
+        function requestQuote() {
+            let quantity, deliveryType, selectedAreaText;
+            
+            if (isMultiArea) {
+                const totalQuantity = multiAreas.reduce((sum, area) => sum + area.quantity, 0);
+                quantity = totalQuantity.toLocaleString();
+                deliveryType = document.getElementById('multi-delivery-type').value === 'standard' ? 'Standard Delivery' : 'Solus Delivery';
+                selectedAreaText = multiAreas.map(area => `${area.area} (${area.quantity.toLocaleString()})`).join(', ');
+            } else {
+                const quantityValue = validateQuantity(document.getElementById('quantity').value);
+                quantity = quantityValue.toLocaleString();
+                deliveryType = document.getElementById('delivery-type').value === 'standard' ? 'Standard Delivery' : 'Solus Delivery';
+                selectedAreaText = selectedArea;
+            }
+            
+            const total = document.getElementById('quote-total').textContent;
+            const totalWithVAT = document.getElementById('quote-vat').textContent;
+            
+            let designInfo = 'None';
+            if (currentDesign === 'single') designInfo = 'Single-sided design';
+            if (currentDesign === 'double') designInfo = 'Double-sided design';
+            if (currentDesign === 'bifold') designInfo = 'Bi-fold design';
+            if (document.getElementById('source-files').checked && currentDesign !== 'none') {
+                designInfo += ' + source files';
+            }
+            
+            // Get printing details
+            let printingInfo = 'No';
+            if (document.getElementById('include-printing').checked) {
+                const paperSize = document.getElementById('paper-size').value || 'Not selected';
+                const paperStock = document.getElementById('paper-stock').value || 'Not selected';
+                const paperFinish = document.getElementById('paper-finish').value || 'Not selected';
+                const printSides = document.getElementById('print-sides').value || 'Not selected';
+                printingInfo = `Yes - ${paperSize}, ${paperStock}, ${paperFinish}, ${printSides}`;
+            }
+            
+            // Get discount info
+            let discountInfo = 'None';
+            const newCustomer = document.getElementById('new-customer').checked;
+            const annualContract = document.getElementById('annual-contract').checked;
+            if (newCustomer && annualContract) {
+                discountInfo = 'New Customer (15%) + Annual Contract (12%) = 25% total';
+            } else if (newCustomer) {
+                discountInfo = 'New Customer (15%)';
+            } else if (annualContract) {
+                discountInfo = 'Annual Contract (12%)';
+            }
+            
+            // Generate a unique quote reference
+            const now = new Date();
+            const quoteRef = `PDQ-${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2,'0')}${now.getDate().toString().padStart(2,'0')}-${now.getHours().toString().padStart(2,'0')}${now.getMinutes().toString().padStart(2,'0')}`;
+            
+            // Create detailed additional information
+            const additionalDetails = `Calculator Quote Generated: ${now.toLocaleString()}
+Multi-Area Mode: ${isMultiArea ? 'Yes' : 'No'}
+${isMultiArea ? `Individual Areas: ${multiAreas.map(a => `${a.area}: ${a.quantity.toLocaleString()}`).join(', ')}` : ''}
+Discounts Applied: ${discountInfo}
+Source Files Requested: ${document.getElementById('source-files').checked ? 'Yes' : 'No'}
+Generated from PDQ Leaflets Quote Calculator`;
+
+            // Your Google Form URL with pre-filled data
+            const googleFormURL = 'https://docs.google.com/forms/d/e/1FAIpQLSdP7_sx3AbqWfvEXTyUPoWDa2euvnxvu5-GNHs7u7R0xKuu1Q/viewform';
+            
+            // Pre-fill parameters using your actual entry IDs
+            const formParams = new URLSearchParams({
+                'entry.470958436': selectedAreaText,        // Delivery Areas
+                'entry.579439748': quantity,                // Total Quantity
+                'entry.2016134755': deliveryType,           // Delivery Type
+                'entry.1152225761': designInfo,             // Design Type
+                'entry.1643154630': printingInfo,           // Print Service
+                'entry.1651987508': `${total} (${totalWithVAT})`, // Total Price
+                'entry.621454976': quoteRef,                // Quote Reference
+                'entry.2073925099': additionalDetails       // Additional Details
+            });
+            
+            // Open your Google Form with all fields pre-filled
+            const finalURL = `${googleFormURL}?${formParams.toString()}`;
+            window.open(finalURL, '_blank');
+            
+            // Show confirmation to user
+            const button = document.querySelector('.btn-primary');
+            const originalText = button.textContent;
+            button.textContent = '✅ Opening quote form...';
+            button.style.background = '#10b981';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '#2563eb';
+            }, 3000);
+        }
+
+        function syncQuantityInputs() {
+            const quickQuantity = document.getElementById('quick-quantity');
+            const mainQuantity = document.getElementById('quantity');
+            
+            let isUpdating = false;
+            
+            // Quick quantity input - just sync, don't calculate
+            quickQuantity.addEventListener('input', function() {
+                if (isUpdating) return;
+                isUpdating = true;
+                mainQuantity.value = this.value;
+                isUpdating = false;
+            });
+            
+            // Quick quantity blur - validate and calculate
+            quickQuantity.addEventListener('blur', function() {
+                if (isUpdating) return;
+                isUpdating = true;
+                const validated = validateQuantity(this.value);
+                this.value = validated;
+                mainQuantity.value = validated;
+                isUpdating = false;
+                calculatePrice();
+            });
+            
+            // Main quantity input - just sync, don't calculate  
+            mainQuantity.addEventListener('input', function() {
+                if (isUpdating) return;
+                isUpdating = true;
+                quickQuantity.value = this.value;
+                isUpdating = false;
+            });
+            
+            // Main quantity blur - validate and calculate
+            mainQuantity.addEventListener('blur', function() {
+                if (isUpdating) return;
+                isUpdating = true;
+                const validated = validateQuantity(this.value);
+                this.value = validated;
+                quickQuantity.value = validated;
+                isUpdating = false;
+                calculatePrice();
+            });
+        }
+
+        // Event listeners
+        function initializeEventListeners() {
+            // Sync quantity inputs
+            syncQuantityInputs();
+            
+            // Form change listeners
+            document.getElementById('delivery-type').addEventListener('change', calculatePrice);
+            document.getElementById('extended-areas').addEventListener('change', setExtendedArea);
+            document.getElementById('multi-area-mode').addEventListener('change', toggleMultiArea);
+            document.getElementById('multi-delivery-type').addEventListener('change', function() {
+                // Recalculate all multi-area prices when delivery type changes
+                multiAreas.forEach(area => updateMultiArea(area.id));
+            });
+            document.getElementById('include-printing').addEventListener('change', togglePrintingOptions);
+            document.getElementById('paper-size').addEventListener('change', calculatePrice);
+            document.getElementById('paper-stock').addEventListener('change', calculatePrice);
+            document.getElementById('paper-finish').addEventListener('change', calculatePrice);
+            document.getElementById('print-sides').addEventListener('change', calculatePrice);
+            document.getElementById('new-customer').addEventListener('change', calculatePrice);
+            document.getElementById('annual-contract').addEventListener('change', calculatePrice);
+            document.getElementById('source-files').addEventListener('change', calculatePrice);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                initializeEventListeners();
+                
+                // Set initial selections and values
+                document.querySelector('[onclick="setPostcode(\'PL2\')"]').classList.add('selected');
+                selectedArea = 'PL2';
+                
+                // Ensure default quantities are set
+                const quantityInput = document.getElementById('quantity');
+                const quickQuantityInput = document.getElementById('quick-quantity');
+                
+                if (!quantityInput.value) {
+                    quantityInput.value = '1000';
+                }
+                if (!quickQuantityInput.value) {
+                    quickQuantityInput.value = '1000';
+                }
+                
+                // Initial calculation with validated inputs
+                calculatePrice();
+                
+                console.log('PDQ Calculator initialized successfully');
+            } catch (error) {
+                console.error('Error initializing PDQ Calculator:', error);
+                // Fallback calculation
+                setTimeout(() => {
+                    calculatePrice();
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
+                
