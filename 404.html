@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDQ Leaflets - 404</title>
+    <meta name="description" content="The page you're looking for doesn't exist. Find what you need with PDQ Leaflets - professional leaflet distribution, design and printing in Plymouth.">
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+
+        :root {
+            --primary-dark: #0f172a;
+            --secondary-dark: #1e293b;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+            --section-bg: #f8fafc;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-success: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--section-bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header - Consistent with other pages */
+        header {
+            background: rgba(248, 250, 252, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-text {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            text-decoration: none;
+            letter-spacing: -0.025em;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .cta-nav {
+            background: var(--accent-blue) !important;
+            color: white !important;
+            padding: 12px 20px !important;
+            border-radius: 25px !important;
+            font-weight: 700 !important;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .cta-nav:hover {
+            background: #2563eb !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Mobile menu */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 3px;
+        }
+
+        /* Main 404 Content */
+        .error-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 0;
+            min-height: calc(100vh - 200px);
+        }
+
+        .error-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .error-animation {
+            margin-bottom: 3rem;
+        }
+
+        .error-number {
+            font-size: 12rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        .error-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .error-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        /* Action Buttons */
+        .error-actions {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-blue);
+            border: 2px solid var(--accent-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Quick Links */
+        .quick-links {
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            margin-top: 2rem;
+        }
+
+        .quick-links h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .link-item {
+            background: var(--section-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .link-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-blue);
+        }
+
+        .link-item a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 600;
+            display: block;
+        }
+
+        .link-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .link-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .link-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-dark);
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: auto;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .error-number {
+                font-size: 8rem;
+            }
+
+            .error-title {
+                font-size: 2rem;
+            }
+
+            .error-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .error-actions {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+
+            .quick-links {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .error-number {
+                font-size: 6rem;
+            }
+
+            .error-main {
+                padding: 40px 0;
+            }
+        }
+
+        /* Accessibility */
+        .btn:focus,
+        .nav-links a:focus {
+            outline: 2px solid var(--accent-blue);
+            outline-offset: 2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo-container">
+                <a href="index.html" class="logo-text">PDQ LEAFLETS</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="distribution.html">Distribution</a></li>
+                <li><a href="design.html">Design</a></li>
+                <li><a href="printing.html">Printing</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="quote-calculator.html" class="cta-nav">Get Quote</a></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main 404 Content -->
+    <main class="error-main">
+        <div class="container">
+            <div class="error-content">
+                <!-- 404 Animation -->
+                <div class="error-animation">
+                    <div class="error-number">404</div>
+                </div>
+
+                <!-- Error Message -->
+                <h1 class="error-title">Oops! Page Not Found</h1>
+                <p class="error-subtitle">
+                    The page you're looking for is either unavailable, or doesn't exist! 
+                    Don't worry though - we can help you find what you need.
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="error-actions">
+                    <a href="index.html" class="btn btn-primary">
+                        🏠 Go Home
+                    </a>
+                    <a href="quote-calculator.html" class="btn btn-secondary">
+                        💰 Get Quote
+                    </a>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="quick-links">
+                    <h3>Let's get back on track...</h3>
+                    <div class="links-grid">
+                        <div class="link-item">
+                            <a href="index.html">
+                                <span class="link-icon">🏠</span>
+                                <div class="link-title">Homepage</div>
+                                <div class="link-desc">Learn about our services</div>
+                            </a>
+                        </div>
+                        <div class="link-item">
+                            <a href="distribution.html">
+                                <span class="link-icon">📬</span>
+                                <div class="link-title">Distribution</div>
+                                <div class="link-desc">GPS-tracked delivery</div>
+                            </a>
+                        </div>
+                        <div class="link-item">
+                            <a href="design.html">
+                                <span class="link-icon">🎨</span>
+                                <div class="link-title">Design</div>
+                                <div class="link-desc">Professional design services</div>
+                            </a>
+                        </div>
+                        <div class="link-item">
+                            <a href="printing.html">
+                                <span class="link-icon">🖨️</span>
+                                <div class="link-title">Printing</div>
+                                <div class="link-desc">High-quality printing</div>
+                            </a>
+                        </div>
+                        <div class="link-item">
+                            <a href="quote-calculator.html">
+                                <span class="link-icon">💰</span>
+                                <div class="link-title">Get Quote</div>
+                                <div class="link-desc">Instant price calculator</div>
+                            </a>
+                        </div>
+                        <div class="link-item">
+                            <a href="index.html#contact">
+                                <span class="link-icon">📞</span>
+                                <div class="link-title">Contact</div>
+                                <div class="link-desc">Get in touch with us</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact CTA -->
+                <div style="background: linear-gradient(135deg, var(--accent-blue) 0%, #1d4ed8 100%); padding: 2rem; border-radius: 15px; color: white; text-align: center; margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">💬 Need Help?</h3>
+                    <p style="margin-bottom: 1.5rem; opacity: 0.9;">Can't find what you're looking for? Our friendly team is here to help!</p>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="tel:01752546123" style="background: rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">
+                            📞 Call: 01752 546 123
+                        </a>
+                        <a href="mailto:info@pdqleaflets.co.uk" style="background: rgba(255, 255, 255, 0.2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">
+                            ✉️ Email Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 PDQ Leaflets</p>
+            <p>PDQ Leaflets is a trading name of NBSF Services Limited (16530904), a registered company in England and Wales.</p>
+            <p>Registered Office: 23 Lockyer Street, Plymouth, PL1 2QZ.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+        const navLinks = document.querySelector(".nav-links");
+
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener("click", function () {
+                navLinks.style.display =
+                    navLinks.style.display === "flex" ? "none" : "flex";
+                navLinks.style.flexDirection = "column";
+                navLinks.style.position = "absolute";
+                navLinks.style.top = "100%";
+                navLinks.style.left = "0";
+                navLinks.style.right = "0";
+                navLinks.style.background = "white";
+                navLinks.style.padding = "2rem";
+                navLinks.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.12)";
+                navLinks.style.borderRadius = "0 0 20px 20px";
+            });
+        }
+
+        // Enhanced header scroll effect
+        window.addEventListener("scroll", function () {
+            const header = document.querySelector("header");
+            if (window.scrollY > 100) {
+                header.style.background = "rgba(248, 250, 252, 0.98)";
+                header.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.12)";
+            } else {
+                header.style.background = "rgba(248, 250, 252, 0.95)";
+                header.style.boxShadow = "none";
+            }
+        });
+
+        // Track 404 errors (you could send this to analytics)
+        const currentUrl = window.location.href;
+        console.log(`404 Error: Page not found - ${currentUrl}`);
+        
+        // Optional: Send to analytics service
+        // gtag('event', '404_error', {
+        //     'page_location': currentUrl,
+        //     'page_title': 'Page Not Found'
+        // });
+    </script>
+</body>
+</html>
