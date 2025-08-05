@@ -1089,8 +1089,8 @@
         <div class="calculator-section">
             <div class="calculator-header">
                 <h1>Get Your Instant Quote</h1>
+                <p><b>Please Note:</b> This is a new feature. If you encounter any problems, please let us know.</p>
                 <p>Configure your leaflet campaign below to see real-time pricing for distribution, design, and printing services.</p>
-                <p><i>Prices displayed are for reference only.</i></p>
             </div>
 
             <!-- Distribution Settings -->
@@ -1123,7 +1123,7 @@
                             <!-- Cheapest Option Button -->
                             <div style="margin-top: 15px; text-align: center;">
                                 <button class="cheapest-btn" onclick="setCheapestOption()">
-                                    💰 Pick Standard Area (Cheapest)
+                                    💰 Pick Standard Area - Cheapest Option
                                 </button>
                             </div>
                         </div>
@@ -1980,7 +1980,7 @@
                 this.updateMultiAreaTotal();
             }
 
-            // FIXED: Enhanced multi-area update with better validation
+            // FIXED: Enhanced multi-area update with consistent quantity validation
             updateMultiArea(areaId) {
                 const row = document.getElementById(areaId);
                 if (!row) return;
@@ -1997,29 +1997,41 @@
                 const inputValue = inputs[0].value;
                 const quantity = this.validateQuantity(inputValue, false);
                 
-                // Only update input value if quantity is valid (>= 1000)
+                // FIXED: Apply same quantity validation as single-area mode
+                // Only update input value if quantity is valid and different from current value
                 if (quantity >= 1000) {
-                    inputs[0].value = quantity;
+                    const roundedQuantity = Math.ceil(quantity / 1000) * 1000;
+                    if (roundedQuantity !== parseInt(inputs[0].value)) {
+                        inputs[0].value = roundedQuantity;
+                    }
+                    
+                    // Add error styling for values under 1000
+                    inputs[0].classList.remove('input-error');
+                } else if (quantity > 0 && quantity < 1000) {
+                    // Show error styling but don't auto-correct yet
+                    inputs[0].classList.add('input-error');
                 }
                 
                 const areaIndex = this.multiAreas.findIndex(a => a.id === areaId);
                 if (areaIndex !== -1) {
                     this.multiAreas[areaIndex].area = area;
-                    this.multiAreas[areaIndex].quantity = Math.max(quantity, 1000);
+                    // Use rounded quantity for calculations, minimum 1000
+                    const calculationQuantity = Math.max(Math.ceil(quantity / 1000) * 1000, 1000);
+                    this.multiAreas[areaIndex].quantity = calculationQuantity;
                     
-                    if (area && quantity >= 1000) {
+                    if (area && calculationQuantity >= 1000) {
                         const deliveryType = document.getElementById('multi-delivery-type').value;
                         const areaType = this.getAreaType(area);
                         const isExtended = areaType && areaType.includes('extended');
                         const baseAreaType = areaType ? areaType.replace('-extended', '') : 'standard';
-                        const quantityTier = this.getQuantityTier(quantity);
+                        const quantityTier = this.getQuantityTier(calculationQuantity);
                         
                         let distributionPrice = this.pricingData[baseAreaType][deliveryType][quantityTier];
                         if (isExtended) {
                             distributionPrice += 8;
                         }
                         
-                        const areaTotal = (distributionPrice * quantity / 1000);
+                        const areaTotal = (distributionPrice * calculationQuantity / 1000);
                         this.multiAreas[areaIndex].price = areaTotal;
                         
                         document.getElementById(`price_${areaId}`).textContent = `£${areaTotal.toFixed(2)}`;
