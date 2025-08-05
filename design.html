@@ -59,6 +59,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
         }
 
         .logo-container {
@@ -122,6 +123,9 @@
             flex-direction: column;
             cursor: pointer;
             padding: 8px;
+            background: none;
+            border: none;
+            z-index: 1001;
         }
 
         .mobile-menu-btn span {
@@ -131,6 +135,19 @@
             margin: 3px 0;
             transition: 0.3s;
             border-radius: 3px;
+        }
+
+        /* Mobile menu animation when active */
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
         }
 
         /* Page Header */
@@ -476,6 +493,21 @@
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(248, 250, 252, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 2rem;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+                border-radius: 0 0 20px 20px;
+                gap: 1rem;
+            }
+
+            .nav-links.show {
+                display: flex;
             }
 
             .mobile-menu-btn {
@@ -505,6 +537,10 @@
             .container {
                 padding: 0 16px;
             }
+
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -523,11 +559,11 @@
                 <li><a href="index.html#contact">Contact</a></li>
                 <li><a href="quote.html" class="cta-nav">Quote</a></li>
             </ul>
-            <div class="mobile-menu-btn">
+            <button class="mobile-menu-btn" aria-label="Toggle mobile menu">
                 <span></span>
                 <span></span>
                 <span></span>
-            </div>
+            </button>
         </nav>
     </header>
 
@@ -788,17 +824,31 @@
 
         if (mobileMenuBtn && navLinks) {
             mobileMenuBtn.addEventListener("click", function () {
-                navLinks.style.display =
-                    navLinks.style.display === "flex" ? "none" : "flex";
-                navLinks.style.flexDirection = "column";
-                navLinks.style.position = "absolute";
-                navLinks.style.top = "100%";
-                navLinks.style.left = "0";
-                navLinks.style.right = "0";
-                navLinks.style.background = "white";
-                navLinks.style.padding = "2rem";
-                navLinks.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.12)";
-                navLinks.style.borderRadius = "0 0 20px 20px";
+                // Toggle the 'show' class on nav-links
+                navLinks.classList.toggle("show");
+                
+                // Toggle the 'active' class on mobile menu button for animation
+                mobileMenuBtn.classList.toggle("active");
+            });
+
+            // Close mobile menu when clicking on a link
+            const navLinksItems = navLinks.querySelectorAll("a");
+            navLinksItems.forEach(link => {
+                link.addEventListener("click", function() {
+                    navLinks.classList.remove("show");
+                    mobileMenuBtn.classList.remove("active");
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener("click", function(event) {
+                const isClickInsideNav = navLinks.contains(event.target);
+                const isClickOnMenuBtn = mobileMenuBtn.contains(event.target);
+                
+                if (!isClickInsideNav && !isClickOnMenuBtn && navLinks.classList.contains("show")) {
+                    navLinks.classList.remove("show");
+                    mobileMenuBtn.classList.remove("active");
+                }
             });
         }
 
@@ -812,3 +862,7 @@
                 header.style.background = "rgba(248, 250, 252, 0.95)";
                 header.style.boxShadow = "none";
             }
+        });
+    </script>
+</body>
+</html>
