@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDQ Leaflets - Print Service</title>
+    <meta name="description" content="High-quality leaflet printing in Plymouth. A4, A5, A6, and DL sizes on premium paper stocks. Available exclusively for PDQ Leaflets distribution clients.">
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+        :root {
+            --primary-dark: #0f172a;
+            --secondary-dark: #1e293b;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+            --section-bg: #f8fafc;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-success: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--section-bg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header - Consistent across all pages */
+        header {
+            background: rgba(248, 250, 252, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-text {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            text-decoration: none;
+            letter-spacing: -0.025em;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .cta-nav {
+            background: var(--accent-blue) !important;
+            color: white !important;
+            padding: 12px 20px !important;
+            border-radius: 25px !important;
+            font-weight: 700 !important;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .cta-nav:hover {
+            background: #2563eb !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Mobile menu */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 3px;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--accent-orange) 0%, #ea580c 100%);
+            color: white;
+            padding: 150px 0 80px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -0.03em;
+        }
+
+        .page-header p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 80px 0;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        /* Notice Box */
+        .notice-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            border-left: 5px solid var(--accent-orange);
+        }
+
+        .notice-box h3 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .notice-box p {
+            color: #78350f;
+            margin: 0;
+        }
+
+        /* Paper Sizes */
+        .size-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .size-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .size-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .size-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .size-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .size-dimensions {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .size-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Paper Options */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .option-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .option-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+        }
+
+        .option-card h4 {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .option-list {
+            list-style: none;
+        }
+
+        .option-list li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-list li:last-child {
+            border-bottom: none;
+        }
+
+        .recommended {
+            background: rgba(16, 185, 129, 0.1);
+            color: #065f46;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Pricing Table */
+        .pricing-table {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 3rem 0;
+            overflow-x: auto;
+        }
+
+        .pricing-table h3 {
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--section-bg);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        .price-highlight {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        /* Quality Standards */
+        .quality-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .quality-item {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .quality-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .quality-item h4 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .quality-item p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* FAQ Section */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .faq-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .faq-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            margin-top: 4rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-blue);
+            border: 2px solid var(--accent-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .size-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quality-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+
+            .pricing-table {
+                font-size: 0.8rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .size-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quality-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo-container">
+                <a href="index.html" class="logo-text">PDQ LEAFLETS</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="distribution.html">Distribution</a></li>
+                <li><a href="design.html">Design</a></li>
+                <li><a href="printing.html">Printing</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="quote-calculator.html" class="cta-nav">Get Quote</a></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Leaflet Printing</h1>
+            <p>High-quality printing on premium paper stocks. Professional results that represent your brand perfectly, available exclusively for leaflets we distribute.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Important Notice -->
+            <div class="notice-box">
+                <h3>📋 Distribution Clients Only</h3>
+                <p>Our printing services are exclusively available for leaflets that we distribute. This ensures quality control and streamlined service from design to delivery. Contact us to discuss standalone printing projects.</p>
+            </div>
+
+            <!-- Paper Sizes -->
+            <section class="section">
+                <h2 class="section-title">Available Sizes</h2>
+                <p class="section-subtitle">Choose from our range of popular leaflet sizes, each optimized for different marketing needs and distribution methods.</p>
+                
+                <div class="size-grid">
+                    <div class="size-card">
+                        <div class="size-icon">📄</div>
+                        <h3>A6</h3>
+                        <div class="size-dimensions">105 × 148mm</div>
+                        <p class="size-description">Compact and cost-effective. Perfect for simple messages, contact cards, or budget campaigns with maximum quantity.</p>
+                    </div>
+                    <div class="size-card">
+                        <div class="size-icon">📋</div>
+                        <h3>A5</h3>
+                        <div class="size-dimensions">148 × 210mm</div>
+                        <p class="size-description">Most popular choice. Great balance of space and cost. Ideal for restaurants, services, and promotional offers.</p>
+                    </div>
+                    <div class="size-card">
+                        <div class="size-icon">📊</div>
+                        <h3>A4</h3>
+                        <div class="size-dimensions">210 × 297mm</div>
+                        <p class="size-description">Maximum impact and information space. Perfect for property, comprehensive service lists, or detailed promotions.</p>
+                    </div>
+                    <div class="size-card">
+                        <div class="size-icon">📜</div>
+                        <h3>DL</h3>
+                        <div class="size-dimensions">99 × 210mm</div>
+                        <p class="size-description">Slim format that stands out. Great for takeaway menus, special offers, or unique marketing campaigns.</p>
+                    </div>
+                    <div class="size-card">
+                        <div class="size-icon">📑</div>
+                        <h3>Bi-fold</h3>
+                        <div class="size-dimensions">A4 folded to DL</div>
+                        <p class="size-description">Premium 4-panel format. Opens from DL size to full A4, perfect for detailed service information and premium presentations.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Paper Options -->
+            <section class="section">
+                <h2 class="section-title">Paper Quality & Finishes</h2>
+                <p class="section-subtitle">Choose the paper quality and finish that best represents your brand and fits your budget.</p>
+                
+                <div class="options-grid">
+                    <div class="option-card">
+                        <div class="option-header">
+                            <div class="option-icon">📄</div>
+                            <h4>Paper Quality</h4>
+                        </div>
+                        <ul class="option-list">
+                            <li>Budget (130gsm) <span>Great value</span></li>
+                            <li>Standard (170gsm) <span class="recommended">Popular</span></li>
+                            <li>Premium (250gsm) <span>Luxury feel</span></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="option-card">
+                        <div class="option-header">
+                            <div class="option-icon">✨</div>
+                            <h4>Paper Finish</h4>
+                        </div>
+                        <ul class="option-list">
+                            <li>Matte <span>Elegant, no glare</span></li>
+                            <li>Gloss <span class="recommended">Vibrant colors</span></li>
+                            <li>Uncoated <span>Natural feel</span></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="option-card">
+                        <div class="option-header">
+                            <div class="option-icon">🔄</div>
+                            <h4>Print Options</h4>
+                        </div>
+                        <ul class="option-list">
+                            <li>Single Sided <span>Cost effective</span></li>
+                            <li>Double Sided <span class="recommended">More info</span></li>
+                            <li>Bi-fold (4 panels) <span>Premium</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            
+
+            <!-- Quality Standards -->
+            <section class="section">
+                <h2 class="section-title">Our Quality Standards</h2>
+                <p class="section-subtitle">Every print job meets our strict quality standards to ensure your marketing materials represent your brand perfectly.</p>
+                
+                <div class="quality-grid">
+                    <div class="quality-item">
+                        <div class="quality-icon">🎯</div>
+                        <h4>Color Accuracy</h4>
+                        <p>Professional color management ensures your prints match your digital designs perfectly.</p>
+                    </div>
+                    <div class="quality-item">
+                        <div class="quality-icon">✂️</div>
+                        <h4>Precise Cutting</h4>
+                        <p>Clean, accurate cuts with proper finishing for a professional appearance every time.</p>
+                    </div>
+                    <div class="quality-item">
+                        <div class="quality-icon">🔍</div>
+                        <h4>Quality Control</h4>
+                        <p>Every batch is checked for print quality, color consistency, and finishing before distribution.</p>
+                    </div>
+                    <div class="quality-item">
+                        <div class="quality-icon">📦</div>
+                        <h4>Safe Packaging</h4>
+                        <p>Careful packaging ensures your leaflets arrive in perfect condition for distribution.</p>
+                    </div>
+                    <div class="quality-item">
+                        <div class="quality-icon">⚡</div>
+                        <h4>Fast Turnaround</h4>
+                        <p>Quick production times without compromising quality - coordinated with your distribution schedule.</p>
+                    </div>
+                    <div class="quality-item">
+                        <div class="quality-icon">♻️</div>
+                        <h4>Eco-Friendly</h4>
+                        <p>Sustainable printing practices with FSC-certified papers and eco-friendly inks where possible.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- File Requirements -->
+            <section class="section">
+                <div style="background: var(--card-bg); padding: 2.5rem; border-radius: 20px; border-left: 5px solid var(--accent-blue);">
+                    <h3 style="color: var(--text-primary); margin-bottom: 1.5rem;">📁 File Requirements</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                        <div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">File Format</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">High-resolution PDF preferred. We also accept AI, EPS, and high-res JPEG files.</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Resolution</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Minimum 300 DPI for crisp, professional print quality.</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Bleed & Margins</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">3mm bleed around edges, 5mm safety margin for text and important elements.</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Color Mode</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">CMYK color mode for accurate printing. We can convert RGB files if needed.</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: var(--section-bg); border-radius: 10px;">
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">
+                            <strong>Need help with file preparation?</strong> Our design team can prepare your files for printing or create your leaflet from scratch.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="section">
+                <h2 class="section-title">Printing FAQ</h2>
+                <p class="section-subtitle">Common questions about our leaflet printing services.</p>
+                
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4>How long does printing take?</h4>
+                        <p>Standard printing takes 3-5 working days from approved artwork. Bi-fold leaflets may take an additional 1-2 days due to folding requirements. We coordinate printing with your distribution schedule for seamless service.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Can I see a proof before printing?</h4>
+                        <p>Yes, if you'd like the review your leaflet before distribution, we are happy to organise this.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>What's the minimum order quantity?</h4>
+                        <p>Our minimum print run is 1,000 leaflets, which aligns with our minimum distribution quantity for cost-effective campaigns.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Do you offer design services?</h4>
+                        <p>Absolutely! We offer complete design services from £50. Our designers can create your leaflet and prepare it for printing in one seamless process, including bi-fold designs.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>What makes bi-fold leaflets special?</h4>
+                        <p>Bi-fold leaflets offer 4 panels of information in a compact A5 format when folded. They open to reveal the full A4 content, perfect for detailed service information, menus, or premium presentations that need more space.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>What if my artwork isn't print-ready?</h4>
+                        <p>We can help prepare your files for printing, including adding bleed, adjusting colors, and optimizing resolution.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Can I print without using your distribution?</h4>
+                        <p>Our printing service is exclusively for leaflets we distribute to ensure quality control and coordination. Contact us to discuss other arrangements.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>How are bi-fold leaflets folded?</h4>
+                        <p>Our bi-fold leaflets are precision-folded using professional equipment. They start as A4 size and are folded down to DL size (99×210mm) for easy distribution, creating a professional 4-panel presentation.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Paper Comparison -->
+            <section class="section">
+                <h2 class="section-title">Paper Quality Comparison</h2>
+                <div style="background: var(--card-bg); padding: 2rem; border-radius: 20px; margin-top: 2rem;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+                        <div style="text-align: center; padding: 1rem; border-radius: 10px; background: var(--section-bg);">
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Budget (130gsm)</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Cost-effective option for high-volume campaigns</p>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                ✓ Economical<br>
+                                ✓ Good for simple designs<br>
+                                ⚠️ Slight transparency
+                            </div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; border-radius: 10px; background: rgba(16, 185, 129, 0.1); border: 2px solid var(--accent-green);">
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Standard (170gsm)</h4>
+                            <div style="background: var(--accent-green); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; margin-bottom: 0.5rem; display: inline-block;">MOST POPULAR</div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Perfect balance of quality and value</p>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                ✓ Professional feel<br>
+                                ✓ Great color reproduction<br>
+                                ✓ No transparency
+                            </div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; border-radius: 10px; background: var(--section-bg);">
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Premium (250gsm)</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Luxury option for high-end brands</p>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                ✓ Premium feel<br>
+                                ✓ Excellent durability<br>
+                                ✓ Superior print quality
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <h2>Ready to Print Your Leaflets?</h2>
+                <p>Get high-quality printing that perfectly complements our professional distribution service. Use our calculator to see printing prices for your specific requirements.</p>
+                
+                <div style="margin-top: 2rem;">
+                    <a href="quote-calculator.html" class="btn btn-primary">
+                        🖨️ Get Printing Quote
+                    </a>
+                    <a href="tel:01752546123" class="btn btn-secondary">
+                        📞 Discuss Your Project
+                    </a>
+                </div>
+                
+                <p style="margin-top: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+                    Printing available exclusively for leaflets we distribute. Complete service from design to delivery.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: var(--primary-dark); color: rgba(255, 255, 255, 0.8); text-align: center; padding: 3rem 0;">
+        <div class="container">
+            <p>&copy; 2025 PDQ Leaflets</p>
+            <p>PDQ Leaflets is a trading name of NBSF Services Limited (6530904), a registered company in England and Wales.</p>
+            <p>Registered Office: 23 Lockyer Street, Plymouth, PL1 2QZ.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+        const navLinks = document.querySelector(".nav-links");
+
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener("click", function () {
+                navLinks.style.display =
+                    navLinks.style.display === "flex" ? "none" : "flex";
+                navLinks.style.flexDirection = "column";
+                navLinks.style.position = "absolute";
+                navLinks.style.top = "100%";
+                navLinks.style.left = "0";
+                navLinks.style.right = "0";
+                navLinks.style.background = "white";
+                navLinks.style.padding = "2rem";
+                navLinks.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.12)";
+                navLinks.style.borderRadius = "0 0 20px 20px";
+            });
+        }
+
+        // Enhanced header scroll effect
+        window.addEventListener("scroll", function () {
+            const header = document.querySelector("header");
+            if (window.scrollY > 100) {
+                header.style.background = "rgba(248, 250, 252, 0.98)";
+                header.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.12)";
+            } else {
+                header.style.background = "rgba(248, 250, 252, 0.95)";
+                header.style.boxShadow = "none";
+            }
+        });
+    </script>
+</body>
+</html>
