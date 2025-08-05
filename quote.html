@@ -120,47 +120,7 @@
             100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
-        /* Quick Options */
-        .quick-options {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f1f5f9;
-            border-radius: 12px;
-        }
-
-        .quick-options h4 {
-            margin-bottom: 15px;
-            color: #374151;
-        }
-
-        .quick-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            align-items: end;
-        }
-
-        .quick-controls .form-group {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .quick-controls label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #374151;
-            font-size: 0.9rem;
-        }
-
-        .quick-controls select {
-            padding: 10px;
-            border: 2px solid #e5e7eb;
-            border-radius: 6px;
-            width: 100%;
-            background: white;
-        }
-
+        /* Cheapest Option Button */
         .cheapest-btn {
             background: #10b981;
             color: white;
@@ -170,18 +130,145 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            flex: 2;
-            height: 46px;
+            font-size: 0.95rem;
             position: relative;
         }
 
         .cheapest-btn:hover {
             background: #059669;
+            transform: translateY(-1px);
         }
 
         .cheapest-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Special Offer Banner */
+        .special-offer-banner {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            grid-column: 1 / -1;
+        }
+
+        .special-offer-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20px;
+            width: 100px;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(15deg);
+        }
+
+        .offer-content {
+            flex: 1;
+            z-index: 2;
+        }
+
+        .offer-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .offer-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .offer-details {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .price-comparison {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0;
+            flex-wrap: wrap;
+        }
+
+        .regular-price {
+            font-size: 0.95rem;
+            text-decoration: line-through;
+            opacity: 0.8;
+            font-weight: normal;
+        }
+
+        .savings-badge {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .offer-includes {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .offer-expiry {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        .offer-cta {
+            z-index: 2;
+        }
+
+        .offer-btn {
+            background: white;
+            color: #10b981;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .offer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            background: #f8fafc;
+        }
+
+        .offer-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         /* Form Styling */
@@ -244,21 +331,6 @@
         }
 
         .form-group input[type="number"]:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .quick-controls input[type="number"] {
-            padding: 10px;
-            border: 2px solid #e5e7eb;
-            border-radius: 6px;
-            width: 100%;
-            background: white;
-            font-size: 1rem;
-        }
-
-        .quick-controls input[type="number"]:focus {
             outline: none;
             border-color: #2563eb;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
@@ -826,6 +898,10 @@
                 gap: 30px;
             }
 
+            .special-offer-banner {
+                grid-column: 1;
+            }
+
             .quote-summary {
                 position: static;
                 top: auto;
@@ -838,6 +914,24 @@
         }
 
         @media (max-width: 768px) {
+            .special-offer-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            .offer-title {
+                font-size: 1.2rem;
+            }
+
+            .offer-details {
+                font-size: 1rem;
+            }
+
+            .price-comparison {
+                justify-content: center;
+                font-size: 0.9rem;
+            }
             .main-container {
                 padding: 20px 15px;
             }
@@ -874,20 +968,6 @@
 
             .service-options {
                 grid-template-columns: 1fr;
-            }
-
-            .quick-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .quick-controls .form-group {
-                margin-bottom: 10px;
-            }
-
-            .cheapest-btn {
-                height: auto;
-                padding: 12px 24px;
             }
 
             .area-row {
@@ -937,32 +1017,34 @@
 
     <!-- Main Container -->
     <div class="main-container">
+        <!-- Special Offer Banner -->
+        <div class="special-offer-banner">
+            <div class="offer-content">
+                <div class="offer-badge">🎉 LAUNCH SPECIAL</div>
+                <div class="offer-title">Design + Print + Distribute Package</div>
+                <div class="offer-details">
+                    <strong>5,000 Double-Sided A5 Flyers for just £200 + VAT</strong>
+                    <div class="price-comparison">
+                        <span class="regular-price">Regular Price: £438 + VAT</span>
+                        <span class="savings-badge">SAVE £238 (54%)</span>
+                    </div>
+                    <span class="offer-includes">Includes: Professional design, premium printing & full distribution</span>
+                </div>
+                <div class="offer-expiry">⏰ Offer ends 1st September 2025</div>
+            </div>
+            <div class="offer-cta">
+                <button class="offer-btn" onclick="applySpecialOffer()">
+                    ⚡ Apply This Offer
+                </button>
+            </div>
+        </div>
+
         <!-- Calculator Form -->
         <div class="calculator-section">
             <div class="calculator-header">
                 <h1>Get Your Instant Quote</h1>
                 <p><b>EXPERIMENTAL FEATURE - Pricing is NOT guaranteed. This tool is under construction. Please call us for a quote 01752 546 123.</b></p>
                 <p>Configure your leaflet campaign below to see real-time pricing for distribution, design, and printing services.</p>
-            </div>
-
-            <!-- Quick Options -->
-            <div class="quick-options">
-                <h4>⚡ Quick Start</h4>
-                <div class="quick-controls">
-                    <div class="form-group">
-                        <label for="quick-quantity">Quantity</label>
-                        <input type="number" id="quick-quantity" min="1000" step="1000" placeholder="Enter quantity (min 1,000)" value="1000">
-                        <div id="quick-quantity-error" class="error-message" style="display: none;">
-                            Minimum order is 1,000 leaflets
-                        </div>
-                    </div>
-                    <button class="cheapest-btn" onclick="setCheapestOption()">
-                        💰 Show Best Value
-                    </button>
-                </div>
-                <div style="font-size: 0.85rem; color: #64748b;">
-                    Enter any quantity - automatically rounds up to nearest 1,000
-                </div>
             </div>
 
             <!-- Distribution Settings -->
@@ -990,6 +1072,13 @@
                                 <button class="postcode-btn standard" onclick="setPostcode('PL7')">PL7</button>
                                 <button class="postcode-btn premium" onclick="setPostcode('PL8')">PL8</button>
                                 <button class="postcode-btn standard" onclick="setPostcode('PL9')">PL9</button>
+                            </div>
+                            
+                            <!-- Cheapest Option Button -->
+                            <div style="margin-top: 15px; text-align: center;">
+                                <button class="cheapest-btn" onclick="setCheapestOption()">
+                                    💰 Pick Standard Area - Cheapest Option
+                                </button>
                             </div>
                         </div>
                         
@@ -1267,6 +1356,8 @@
                 this.isMultiArea = false;
                 this.multiAreas = [];
                 this.eventListeners = new Map();
+                this.isSpecialOffer = false; // Track if special offer is applied
+                this.isApplyingSpecialOffer = false; // Track if we're in the middle of applying special offer
                 
                 // Pricing data with improved structure
                 this.pricingData = {
@@ -1314,7 +1405,7 @@
             // Improved quantity validation with better error handling
             validateQuantity(value, showError = true) {
                 const num = parseInt(value) || 0;
-                const errorElement = showError ? document.getElementById('quantity-error') || document.getElementById('quick-quantity-error') : null;
+                const errorElement = showError ? document.getElementById('quantity-error') : null;
                 
                 if (num < 1000) {
                     if (errorElement) {
@@ -1418,6 +1509,11 @@
 
             // Improved debounced calculation
             debouncedCalculate() {
+                // Don't reset special offer if we're in the middle of applying it
+                if (!this.isApplyingSpecialOffer) {
+                    this.resetSpecialOffer();
+                }
+                
                 if (this.debounceTimer) {
                     clearTimeout(this.debounceTimer);
                 }
@@ -1473,39 +1569,23 @@
                 this.debouncedCalculate();
             }
 
-            // Enhanced "Best Value" calculation that finds truly cheapest option
+            // Updated "Best Value" calculation that randomly picks a standard area
             setCheapestOption() {
-                const quickQuantityInput = document.getElementById('quick-quantity');
-                let quickQuantity = this.validateQuantity(quickQuantityInput.value, false);
-                quickQuantityInput.value = quickQuantity;
+                // Pick a random standard area (they all have the same price)
+                const randomIndex = Math.floor(Math.random() * this.standardAreas.length);
+                const randomStandardArea = this.standardAreas[randomIndex];
                 
-                // Find actually cheapest area for this quantity
-                const deliveryType = 'standard';
-                const quantityTier = this.getQuantityTier(quickQuantity);
+                this.selectedArea = randomStandardArea;
                 
-                let cheapestArea = 'PL2';
-                let lowestPrice = this.pricingData.standard[deliveryType][quantityTier];
-                
-                // Check all standard areas
-                this.standardAreas.forEach(area => {
-                    const price = this.pricingData.standard[deliveryType][quantityTier];
-                    if (price < lowestPrice) {
-                        lowestPrice = price;
-                        cheapestArea = area;
-                    }
-                });
-                
-                this.selectedArea = cheapestArea;
-                
-                // Update form values
-                document.getElementById('quantity').value = quickQuantity;
+                // Update form values with defaults
+                document.getElementById('quantity').value = 1000;
                 document.getElementById('delivery-type').value = 'standard';
                 
                 // Update postcode selections
                 document.querySelectorAll('.postcode-btn').forEach(btn => {
                     btn.classList.remove('selected');
                 });
-                document.querySelector(`[onclick="setPostcode('${cheapestArea}')"]`).classList.add('selected');
+                document.querySelector(`[onclick="setPostcode('${randomStandardArea}')"]`).classList.add('selected');
                 
                 document.getElementById('extended-areas').value = '';
                 
@@ -1514,7 +1594,7 @@
                 document.getElementById('include-printing').checked = false;
                 this.togglePrintingOptions();
                 
-                // Apply best discount
+                // Apply new customer discount for best price
                 document.getElementById('new-customer').checked = true;
                 document.getElementById('annual-contract').checked = false;
                 
@@ -1531,6 +1611,93 @@
                     btn.disabled = false;
                     this.calculatePrice();
                 }, 500);
+            }
+
+            // Apply Special Offer function
+            applySpecialOffer() {
+                // Set flag to prevent resetSpecialOffer during application
+                this.isApplyingSpecialOffer = true;
+                this.isSpecialOffer = true;
+                
+                // Set the special offer configuration
+                document.getElementById('quantity').value = 5000;
+                document.getElementById('delivery-type').value = 'standard';
+                
+                // Pick a random standard area for best price
+                const randomIndex = Math.floor(Math.random() * this.standardAreas.length);
+                const randomStandardArea = this.standardAreas[randomIndex];
+                this.selectedArea = randomStandardArea;
+                
+                // Update postcode selections
+                document.querySelectorAll('.postcode-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                document.querySelector(`[onclick="setPostcode('${randomStandardArea}')"]`).classList.add('selected');
+                
+                document.getElementById('extended-areas').value = '';
+                
+                // Set design service
+                this.selectDesign('double');
+                
+                // Set printing options
+                document.getElementById('include-printing').checked = true;
+                this.togglePrintingOptions();
+                document.getElementById('paper-size').value = 'A5';
+                document.getElementById('paper-stock').value = 'standard';
+                document.getElementById('paper-finish').value = 'matte';
+                document.getElementById('print-sides').value = 'double';
+                
+                // Clear discounts for the special offer
+                document.getElementById('new-customer').checked = false;
+                document.getElementById('annual-contract').checked = false;
+                
+                // Ensure single area mode
+                document.getElementById('multi-area-mode').checked = false;
+                this.toggleMultiArea();
+                
+                // Show loading state on the offer button
+                const btn = document.querySelector('.offer-btn');
+                btn.classList.add('loading');
+                btn.disabled = true;
+                btn.textContent = '⚡ Applying Offer...';
+                
+                setTimeout(() => {
+                    // Clear the applying flag and calculate
+                    this.isApplyingSpecialOffer = false;
+                    
+                    btn.classList.remove('loading');
+                    btn.disabled = false;
+                    btn.textContent = '✅ Offer Applied!';
+                    btn.style.background = '#10b981';
+                    btn.style.color = 'white';
+                    
+                    // Reset button after 3 seconds
+                    setTimeout(() => {
+                        btn.textContent = '⚡ Apply This Offer';
+                        btn.style.background = 'white';
+                        btn.style.color = '#10b981';
+                    }, 3000);
+                    
+                    // Force immediate calculation
+                    this.calculatePrice();
+                }, 800);
+            }
+
+            // Reset special offer flag when form changes
+            resetSpecialOffer() {
+                if (this.isSpecialOffer) {
+                    // Check if current settings still match the special offer
+                    const quantity = this.validateQuantity(document.getElementById('quantity').value, false);
+                    const isStillSpecialOffer = quantity === 5000 && 
+                        this.currentDesign === 'double' && 
+                        document.getElementById('include-printing').checked && 
+                        document.getElementById('paper-size').value === 'A5' &&
+                        document.getElementById('print-sides').value === 'double';
+                    
+                    if (!isStillSpecialOffer) {
+                        this.isSpecialOffer = false;
+                    }
+                }
             }
 
             togglePrintingOptions() {
@@ -1843,6 +2010,9 @@
                     }
                 }
 
+                // Reset breakdown label to default
+                document.querySelector('#distribution-cost').closest('.breakdown-item').querySelector('.breakdown-label').textContent = 'Distribution';
+
                 document.getElementById('distribution-cost').textContent = `£${distributionTotal.toFixed(2)}`;
                 
                 // Design breakdown
@@ -1899,6 +2069,51 @@
                 const quantity = this.validateQuantity(quantityInput.value);
                 quantityInput.value = quantity;
                 
+                // Check for special offer conditions FIRST
+                const isSpecialOfferConditions = quantity === 5000 && 
+                    this.currentDesign === 'double' && 
+                    document.getElementById('include-printing').checked && 
+                    document.getElementById('paper-size').value === 'A5' &&
+                    document.getElementById('print-sides').value === 'double' &&
+                    this.isSpecialOffer;
+
+                if (isSpecialOfferConditions) {
+                    // Apply special offer pricing directly
+                    const specialOfferPrice = 200;
+                    const regularPrice = 438;
+                    const savingsAmount = regularPrice - specialOfferPrice;
+                    const savingsPercent = Math.round((savingsAmount / regularPrice) * 100);
+                    const specialOfferWithVAT = specialOfferPrice * 1.2;
+                    const perLeaflet = specialOfferPrice / quantity;
+
+                    // Update all displays with special pricing
+                    document.getElementById('distribution-cost').innerHTML = `
+                        <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                            <span style="text-decoration: line-through; opacity: 0.6; font-size: 0.85rem;">£${regularPrice.toFixed(2)}</span>
+                            <span>£${specialOfferPrice.toFixed(2)}</span>
+                            <span style="color: #10b981; font-size: 0.8rem; font-weight: 700;">SAVE £${savingsAmount} (${savingsPercent}%)</span>
+                        </div>
+                    `;
+                    
+                    // Hide individual breakdowns
+                    document.getElementById('design-breakdown').style.display = 'none';
+                    document.getElementById('printing-breakdown').style.display = 'none';
+                    document.getElementById('discount-breakdown').style.display = 'none';
+                    
+                    // Update breakdown label
+                    document.querySelector('#distribution-cost').closest('.breakdown-item').querySelector('.breakdown-label').textContent = 'Launch Special Package';
+                    
+                    // Update totals
+                    document.getElementById('total-ex-vat').textContent = `£${specialOfferPrice.toFixed(2)}`;
+                    document.getElementById('quote-total').textContent = `£${specialOfferPrice.toFixed(2)}`;
+                    document.getElementById('quote-vat').textContent = `£${specialOfferWithVAT.toFixed(2)} inc. VAT`;
+                    document.getElementById('per-leaflet').textContent = `£${perLeaflet.toFixed(3)} per leaflet`;
+                    
+                    this.isCalculating = false;
+                    return;
+                }
+
+                // Regular pricing calculation
                 const deliveryType = document.getElementById('delivery-type').value;
                 const includePrinting = document.getElementById('include-printing').checked;
                 const newCustomer = document.getElementById('new-customer').checked;
@@ -2177,46 +2392,6 @@ Web: pdqleaflets.co.uk`;
                 }
             }
 
-            // Enhanced quantity input synchronization with debouncing
-            syncQuantityInputs() {
-                const quickQuantity = document.getElementById('quick-quantity');
-                const mainQuantity = document.getElementById('quantity');
-                
-                let syncTimeout = null;
-                
-                const syncFromQuick = () => {
-                    if (syncTimeout) clearTimeout(syncTimeout);
-                    mainQuantity.value = quickQuantity.value;
-                };
-                
-                const syncFromMain = () => {
-                    if (syncTimeout) clearTimeout(syncTimeout);
-                    quickQuantity.value = mainQuantity.value;
-                };
-                
-                const validateAndCalculate = (sourceElement) => {
-                    if (syncTimeout) clearTimeout(syncTimeout);
-                    syncTimeout = setTimeout(() => {
-                        const validated = this.validateQuantity(sourceElement.value);
-                        quickQuantity.value = validated;
-                        mainQuantity.value = validated;
-                        this.debouncedCalculate();
-                    }, 300);
-                };
-
-                // Remove any existing listeners
-                this.removeEventListener(quickQuantity, 'input');
-                this.removeEventListener(quickQuantity, 'blur');
-                this.removeEventListener(mainQuantity, 'input');
-                this.removeEventListener(mainQuantity, 'blur');
-
-                // Add new listeners
-                this.addEventListener(quickQuantity, 'input', syncFromQuick);
-                this.addEventListener(quickQuantity, 'blur', () => validateAndCalculate(quickQuantity));
-                this.addEventListener(mainQuantity, 'input', syncFromMain);
-                this.addEventListener(mainQuantity, 'blur', () => validateAndCalculate(mainQuantity));
-            }
-
             // Enhanced event listener management to prevent memory leaks
             addEventListener(element, event, handler) {
                 if (element && typeof handler === 'function') {
@@ -2252,10 +2427,9 @@ Web: pdqleaflets.co.uk`;
             }
 
             initializeEventListeners() {
-                // Sync quantity inputs
-                this.syncQuantityInputs();
-                
                 // Form change listeners with proper context binding
+                this.addEventListener(document.getElementById('quantity'), 'input', () => this.debouncedCalculate());
+                this.addEventListener(document.getElementById('quantity'), 'blur', () => this.debouncedCalculate());
                 this.addEventListener(document.getElementById('delivery-type'), 'change', () => this.debouncedCalculate());
                 this.addEventListener(document.getElementById('extended-areas'), 'change', () => this.setExtendedArea());
                 this.addEventListener(document.getElementById('multi-area-mode'), 'change', () => this.toggleMultiArea());
@@ -2289,10 +2463,7 @@ Web: pdqleaflets.co.uk`;
                 this.selectedArea = 'PL2';
                 
                 const quantityInput = document.getElementById('quantity');
-                const quickQuantityInput = document.getElementById('quick-quantity');
-                
                 if (!quantityInput.value) quantityInput.value = '1000';
-                if (!quickQuantityInput.value) quickQuantityInput.value = '1000';
             }
         }
 
@@ -2313,6 +2484,10 @@ Web: pdqleaflets.co.uk`;
 
         function setCheapestOption() {
             calculator.setCheapestOption();
+        }
+
+        function applySpecialOffer() {
+            calculator.applySpecialOffer();
         }
 
         function togglePrintingOptions() {
