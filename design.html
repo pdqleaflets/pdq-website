@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDQ Leaflets - Design Service</title>
+    <meta name="description" content="Professional leaflet design services in Plymouth. Single-sided, double-sided, and bi-fold designs from £50. Get your source files included.">
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+        :root {
+            --primary-dark: #0f172a;
+            --secondary-dark: #1e293b;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+            --section-bg: #f8fafc;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-success: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--section-bg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header - Consistent across all pages */
+        header {
+            background: rgba(248, 250, 252, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-text {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            text-decoration: none;
+            letter-spacing: -0.025em;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .cta-nav {
+            background: var(--accent-blue) !important;
+            color: white !important;
+            padding: 12px 20px !important;
+            border-radius: 25px !important;
+            font-weight: 700 !important;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .cta-nav:hover {
+            background: #2563eb !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Mobile menu */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 3px;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--accent-purple) 0%, #6366f1 100%);
+            color: white;
+            padding: 150px 0 80px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -0.03em;
+        }
+
+        .page-header p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 80px 0;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        /* Design Options */
+        .design-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .design-card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .design-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .design-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .design-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .design-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .design-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .design-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .price-tag {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+        }
+
+        .price-note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .features-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .features-list li::before {
+            content: "✓";
+            color: var(--accent-green);
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        /* Process Section */
+        .design-process {
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            margin: 0 auto 1rem;
+        }
+
+        .step h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .step p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Add-on Section */
+        .addon-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border-left: 5px solid #f59e0b;
+        }
+
+        .addon-box h4 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .addon-box p {
+            color: #78350f;
+            margin: 0;
+        }
+
+        /* Portfolio Section */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .portfolio-item {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .portfolio-image {
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .portfolio-content {
+            padding: 1.5rem;
+        }
+
+        .portfolio-content h4 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .portfolio-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* FAQ Section */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .faq-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .faq-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            margin-top: 4rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-blue);
+            border: 2px solid var(--accent-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .design-options {
+                grid-template-columns: 1fr;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo-container">
+                <a href="index.html" class="logo-text">PDQ LEAFLETS</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="distribution.html">Distribution</a></li>
+                <li><a href="design.html">Design</a></li>
+                <li><a href="printing.html">Printing</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="quote-calculator.html" class="cta-nav">Get Quote</a></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Leaflet Design</h1>
+            <p>Professional leaflet design services that capture attention and drive results. From concept to completion, we create designs that work.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Design Options -->
+            <section class="section">
+                <h2 class="section-title">Design Packages</h2>
+                <p class="section-subtitle">Choose from our range of professional design packages, each tailored to different marketing needs and budgets.</p>
+                
+                <div class="design-options">
+                    <div class="design-card">
+                        <div class="design-icon">📄</div>
+                        <h3>Single-Sided Design</h3>
+                        <p>Perfect for simple, focused messaging with maximum impact on one side.</p>
+                        
+                        <div class="price-tag">£50</div>
+                        <div class="price-note">One-time design fee</div>
+
+                        <ul class="features-list">
+                            <li>Professional single-sided design</li>
+                            <li>Up to 3 revision rounds</li>
+                            <li>High-resolution files provided</li>
+                            <li>Print-ready artwork</li>
+                            <li>4-day delivery</li>
+                        </ul>
+
+                        <a href="quote-calculator.html" class="btn btn-primary">Get Quote</a>
+                    </div>
+
+                    <div class="design-card">
+                        <div class="design-icon">📋</div>
+                        <h3>Double-Sided Design</h3>
+                        <p>Maximize your marketing space with professional front and back design.</p>
+                        
+                        <div class="price-tag">£75</div>
+                        <div class="price-note">One-time design fee</div>
+
+                        <ul class="features-list">
+                            <li>Front and back design</li>
+                            <li>Up to 3 revision rounds</li>
+                            <li>High-resolution files provided</li>
+                            <li>Print-ready artwork</li>
+                            <li>4-day delivery</li>
+                        </ul>
+
+                        <a href="quote-calculator.html" class="btn btn-primary">Get Quote</a>
+                    </div>
+
+                    <div class="design-card">
+                        <div class="design-icon">📊</div>
+                        <h3>Bi-Fold Design</h3>
+                        <p>Four-panel folded leaflet design for comprehensive marketing materials.</p>
+                        
+                        <div class="price-tag">£90</div>
+                        <div class="price-note">One-time design fee</div>
+
+                        <ul class="features-list">
+                            <li>4-panel bi-fold design</li>
+                            <li>Up to 3 revision rounds</li>
+                            <li>High-resolution files provided</li>
+                            <li>Print-ready artwork</li>
+                            <li>4-day delivery</li>
+                        </ul>
+
+                        <a href="quote-calculator.html" class="btn btn-primary">Get Quote</a>
+                    </div>
+                </div>
+
+                <!-- Add-on Option -->
+                <div class="addon-box">
+                    <h4>📁 Source Files Add-On (+£25)</h4>
+                    <p>Get the editable design files (AI, PSD, or similar) so you can make future changes or use the design elements elsewhere. Perfect for businesses wanting full control over their design assets.</p>
+                </div>
+            </section>
+
+            <!-- Design Process -->
+            <div class="design-process">
+                <h2 class="section-title">Our Design Process</h2>
+                <p class="section-subtitle">We work collaboratively to ensure your leaflet design perfectly represents your brand and achieves your marketing goals.</p>
+                
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>Brief & Discovery</h4>
+                        <p>We discuss your business, target audience, key messages, and design preferences to understand your vision.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>Concept Creation</h4>
+                        <p>Our designers create initial concepts based on your brief, incorporating your branding and messaging.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>Review & Revisions</h4>
+                        <p>You review the design and we make up to 3 rounds of revisions to perfect the final result.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>Final Delivery</h4>
+                        <p>Receive your print-ready files and optional source files, ready for printing and distribution.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What We Include -->
+            <section class="section">
+                <h2 class="section-title">What's Included</h2>
+                <p class="section-subtitle">Every design package comes with everything you need for professional leaflet marketing.</p>
+                
+                <div class="portfolio-grid">
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">🎨</div>
+                        <div class="portfolio-content">
+                            <h4>Professional Design</h4>
+                            <p>Custom design created by our experienced graphic designers using industry-standard software and best practices.</p>
+                        </div>
+                    </div>
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">📐</div>
+                        <div class="portfolio-content">
+                            <h4>Print-Ready Files</h4>
+                            <p>High-resolution files ready for professional printing.</p>
+                        </div>
+                    </div>
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">🔄</div>
+                        <div class="portfolio-content">
+                            <h4>Revision Rounds</h4>
+                            <p>Up to 3 rounds of revisions included to ensure the final design meets your expectations and requirements.</p>
+                        </div>
+                    </div>
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">⚡</div>
+                        <div class="portfolio-content">
+                            <h4>Fast Turnaround</h4>
+                            <p>Quick delivery times without compromising quality - finished design in 4 days maximum.</p>
+                        </div>
+                    </div>
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">🎯</div>
+                        <div class="portfolio-content">
+                            <h4>Marketing Focus</h4>
+                            <p>Designs that aren't just beautiful but strategically created to drive action and achieve your marketing goals.</p>
+                        </div>
+                    </div>
+                    <div class="portfolio-item">
+                        <div class="portfolio-image">📱</div>
+                        <div class="portfolio-content">
+                            <h4>Digital Versions</h4>
+                            <p>Receive web-optimized versions perfect for social media, email marketing, and digital distribution.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="section">
+                <h2 class="section-title">Design FAQ</h2>
+                <p class="section-subtitle">Common questions about our leaflet design services.</p>
+                
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4>What do I need to provide?</h4>
+                        <p>We need your text content, any images you want included, your logo, brand colors (if any), and a brief description of your goals and target audience.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Can you work with my existing branding?</h4>
+                        <p>Absolutely! We'll incorporate your existing brand guidelines, colors, fonts, and style to ensure consistency across all your marketing materials.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>What if I don't have professional photos?</h4>
+                        <p>We can source high-quality stock images that fit your design, or we can work with photos you provide. We'll advise on image quality requirements.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>How many revisions are included?</h4>
+                        <p>All packages include up to 3 rounds of revisions. Additional revisions can be added for £15 per round if needed.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>What file formats do I receive?</h4>
+                        <p>You'll receive high-resolution PDFs ready for printing, plus JPEG versions for digital use. Source files (AI/PSD) are available as an add-on.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Can you handle rush jobs?</h4>
+                        <p>Yes, we offer expedited design services for urgent projects. Contact us to discuss timeline and rush fees for your specific needs.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Design Tips -->
+            <section class="section">
+                <div style="background: var(--card-bg); padding: 2.5rem; border-radius: 20px; border-left: 5px solid var(--accent-blue);">
+                    <h3 style="color: var(--text-primary); margin-bottom: 1rem;">💡 Design Tips for Success</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Clear Call-to-Action</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Make it obvious what you want readers to do - call, visit, or buy.</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Keep It Simple</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Less is more - focus on one main message per leaflet.</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Use Quality Images</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Professional photos make a huge difference to perceived quality.</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Include Contact Info</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Make it easy for people to get in touch with clear contact details.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <h2>Ready to Create Your Design?</h2>
+                <p>Get a professional leaflet design that stands out and drives results. Our experienced designers are ready to bring your vision to life.</p>
+                
+                <div style="margin-top: 2rem;">
+                    <a href="quote-calculator.html" class="btn btn-primary">
+                        🎨 Get Design Quote
+                    </a>
+                    <a href="tel:01752546123" class="btn btn-secondary">
+                        📞 Discuss Your Project
+                    </a>
+                </div>
+                
+                <p style="margin-top: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+                    Design services are available for leaflets we distribute. Call us to discuss standalone design projects.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: var(--primary-dark); color: rgba(255, 255, 255, 0.8); text-align: center; padding: 3rem 0;">
+        <div class="container">
+            <p>&copy; 2025 PDQ Leaflets</p>
+            <p>PDQ Leaflets is a trading name of NBSF Services Limited (6530904), a registered company in England and Wales.</p>
+            <p>Registered Office: 23 Lockyer Street, Plymouth, PL1 2QZ.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+        const navLinks = document.querySelector(".nav-links");
+
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener("click", function () {
+                navLinks.style.display =
+                    navLinks.style.display === "flex" ? "none" : "flex";
+                navLinks.style.flexDirection = "column";
+                navLinks.style.position = "absolute";
+                navLinks.style.top = "100%";
+                navLinks.style.left = "0";
+                navLinks.style.right = "0";
+                navLinks.style.background = "white";
+                navLinks.style.padding = "2rem";
+                navLinks.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.12)";
+                navLinks.style.borderRadius = "0 0 20px 20px";
+            });
+        }
+
+        // Enhanced header scroll effect
+        window.addEventListener("scroll", function () {
+            const header = document.querySelector("header");
+            if (window.scrollY > 100) {
+                header.style.background = "rgba(248, 250, 252, 0.98)";
+                header.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.12)";
+            } else {
+                header.style.background = "rgba(248, 250, 252, 0.95)";
+                header.style.boxShadow = "none";
+            }
