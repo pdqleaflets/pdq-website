@@ -145,44 +145,55 @@
             transform: none;
         }
 
-        /* Special Offer Banner */
+        /* Special Offer Banners - Updated for side-by-side layout */
+        .offers-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            grid-column: 1 / -1;
+        }
+
         .special-offer-banner {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 24px rgba(16, 185, 129, 0.25);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
             position: relative;
             overflow: hidden;
-            grid-column: 1 / -1;
+        }
+
+        .special-offer-banner.distribution-offer {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            box-shadow: 0 4px 24px rgba(220, 38, 38, 0.25);
         }
 
         .special-offer-banner::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -20px;
-            width: 100px;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.1);
+            top: -30%;
+            right: -15px;
+            width: 60px;
+            height: 160%;
+            background: rgba(255, 255, 255, 0.08);
             transform: rotate(15deg);
         }
 
         .offer-content {
             flex: 1;
             z-index: 2;
+            margin-bottom: 15px;
         }
 
         .offer-badge {
             background: rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
             font-weight: 700;
             display: inline-block;
             margin-bottom: 8px;
@@ -191,55 +202,56 @@
         }
 
         .offer-title {
-            font-size: 1.4rem;
+            font-size: 1.15rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             line-height: 1.2;
         }
 
         .offer-details {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            line-height: 1.4;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            line-height: 1.3;
         }
 
         .price-comparison {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin: 8px 0;
+            gap: 8px;
+            margin: 6px 0;
             flex-wrap: wrap;
         }
 
         .regular-price {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             text-decoration: line-through;
             opacity: 0.8;
             font-weight: normal;
         }
 
         .savings-badge {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.25);
             color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .offer-includes {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             opacity: 0.9;
             font-style: italic;
         }
 
         .offer-expiry {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             opacity: 0.9;
             font-weight: 600;
+            margin-top: 4px;
         }
 
         .offer-cta {
@@ -249,19 +261,20 @@
         .offer-btn {
             background: white;
             color: #10b981;
-            padding: 16px 24px;
+            padding: 12px 18px;
             border: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
         }
 
         .offer-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             background: #f8fafc;
         }
 
@@ -269,6 +282,10 @@
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
+        }
+
+        .offer-btn.distribution-offer {
+            color: #dc2626;
         }
 
         /* Form Styling */
@@ -523,6 +540,12 @@
             cursor: pointer;
         }
 
+        /* Disabled discount styling */
+        .checkbox-group.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
         .info-text {
             font-size: 0.9rem;
             color: #64748b;
@@ -760,6 +783,10 @@
             margin-left: 8px;
         }
 
+        .discount-badge.distribution-discount {
+            background: #dc2626;
+        }
+
         .cta-section {
             margin-top: 30px;
             text-align: center;
@@ -898,7 +925,7 @@
                 gap: 30px;
             }
 
-            .special-offer-banner {
+            .offers-container {
                 grid-column: 1;
             }
 
@@ -914,24 +941,24 @@
         }
 
         @media (max-width: 768px) {
-            .special-offer-banner {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
+            .offers-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
             }
 
             .offer-title {
-                font-size: 1.2rem;
-            }
-
-            .offer-details {
                 font-size: 1rem;
             }
 
-            .price-comparison {
-                justify-content: center;
+            .offer-details {
                 font-size: 0.9rem;
             }
+
+            .price-comparison {
+                justify-content: flex-start;
+                font-size: 0.85rem;
+            }
+            
             .main-container {
                 padding: 20px 15px;
             }
@@ -1017,25 +1044,44 @@
 
     <!-- Main Container -->
     <div class="main-container">
-        <!-- Special Offer Banner -->
-        <div class="special-offer-banner">
-            <div class="offer-content">
-                <div class="offer-badge">🎉 LAUNCH SPECIAL</div>
-                <div class="offer-title">Design + Print + Distribute Package</div>
-                <div class="offer-details">
-                    <strong>5,000 Double-Sided A5 Flyers for just £200 + VAT</strong>
-                    <div class="price-comparison">
-                        <span class="regular-price">Regular Price: £438 + VAT</span>
-                        <span class="savings-badge">SAVE £238 (54%)</span>
+        <!-- Special Offer Banners -->
+        <div class="offers-container">
+            <div class="special-offer-banner">
+                <div class="offer-content">
+                    <div class="offer-badge">🎉 LAUNCH SPECIAL</div>
+                    <div class="offer-title">Design + Print + Distribute Package</div>
+                    <div class="offer-details">
+                        <strong>5,000 Double-Sided A5 Flyers for just £200 + VAT</strong>
+                        <div class="price-comparison">
+                            <span class="regular-price">Regular Price: £438 + VAT</span>
+                            <span class="savings-badge">SAVE £238 (54%)</span>
+                        </div>
+                        <span class="offer-includes">Includes: Professional design, premium printing & full distribution</span>
                     </div>
-                    <span class="offer-includes">Includes: Professional design, premium printing & full distribution</span>
+                    <div class="offer-expiry">⏰ Offer ends 1st September 2025 (Subject to availability)</div>
                 </div>
-                <div class="offer-expiry">⏰ Offer ends 1st September 2025 (Subject to availability)</div>
+                <div class="offer-cta">
+                    <button class="offer-btn" onclick="applySpecialOffer()">
+                        ⚡ Apply This Offer
+                    </button>
+                </div>
             </div>
-            <div class="offer-cta">
-                <button class="offer-btn" onclick="applySpecialOffer()">
-                    ⚡ Apply This Offer
-                </button>
+
+            <div class="special-offer-banner distribution-offer">
+                <div class="offer-content">
+                    <div class="offer-badge">🔥 LIMITED TIME</div>
+                    <div class="offer-title">50% Off Distribution Special</div>
+                    <div class="offer-details">
+                        <strong>Get 50% off all distribution costs!</strong>
+                        <div class="offer-includes">Perfect for existing designs - just add distribution</div>
+                    </div>
+                    <div class="offer-expiry">⏰ Offer ends 31st August 2025 - Cannot be combined with other discounts</div>
+                </div>
+                <div class="offer-cta">
+                    <button class="offer-btn distribution-offer" onclick="applyDistributionOffer()">
+                        🔥 Apply 50% Off
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -1229,6 +1275,7 @@
                                 <option value="A5">A5 (148 × 210mm) - Popular</option>
                                 <option value="A4">A4 (210 × 297mm) - Large</option>
                                 <option value="DL">DL (99 × 210mm) - Slim</option>
+                                <option value="BI-FOLD">Bi-Fold (210 × 297mm folded) - Premium</option>
                             </select>
                         </div>
                         
@@ -1252,13 +1299,14 @@
                             </select>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="form-group" id="print-sides-group">
                             <label for="print-sides">Print Sides</label>
                             <select id="print-sides">
                                 <option value="">Select sides...</option>
                                 <option value="single">Single Sided</option>
                                 <option value="double">Double Sided</option>
                             </select>
+                            <div class="info-text" id="print-sides-info">Choose single or double-sided printing</div>
                         </div>
                     </div>
                     
@@ -1277,13 +1325,13 @@
                 <h3 class="section-title">💰 Available Discounts</h3>
                 <div class="info-text" style="margin-bottom: 15px;">Discounts apply to distribution costs only</div>
                 
-                <div class="checkbox-group">
+                <div class="checkbox-group" id="new-customer-group">
                     <input type="checkbox" id="new-customer">
                     <label for="new-customer">New customer discount (-15%)</label>
                 </div>
                 <div class="info-text">First-time customers receive 15% off distribution</div>
                 
-                <div class="checkbox-group" style="margin-top: 15px;">
+                <div class="checkbox-group" id="annual-contract-group" style="margin-top: 15px;">
                     <input type="checkbox" id="annual-contract">
                     <label for="annual-contract">Annual contract discount (-12%)</label>
                 </div>
@@ -1291,6 +1339,10 @@
                 
                 <div id="combined-discount-info" class="success-message" style="display: none; margin-top: 15px;">
                     🎉 Combined discount: Save 25% on distribution costs!
+                </div>
+
+                <div id="distribution-discount-active" class="success-message" style="display: none; margin-top: 15px;">
+                    🔥 50% Distribution Discount Applied! Other discounts disabled.
                 </div>
             </div>
         </div>
@@ -1357,6 +1409,7 @@
                 this.multiAreas = [];
                 this.eventListeners = new Map();
                 this.isSpecialOffer = false; // Track if special offer is applied
+                this.isDistributionOffer = false; // Track if 50% distribution offer is applied
                 this.isApplyingSpecialOffer = false; // Track if we're in the middle of applying special offer
                 
                 // Pricing data with improved structure
@@ -1371,7 +1424,7 @@
                     }
                 };
 
-                // Improved printing prices with better scaling
+                // Improved printing prices with better scaling including bi-fold
                 this.printingPrices = {
                     A6: { budget: { 1000: 15, 2000: 25, 5000: 45, 10000: 75, 25000: 150, 50000: 280 },
                           standard: { 1000: 20, 2000: 32, 5000: 58, 10000: 95, 25000: 190, 50000: 350 },
@@ -1384,7 +1437,10 @@
                           premium: { 1000: 48, 2000: 78, 5000: 125, 10000: 200, 25000: 400, 50000: 720 } },
                     DL: { budget: { 1000: 16, 2000: 28, 5000: 48, 10000: 78, 25000: 155, 50000: 290 },
                           standard: { 1000: 22, 2000: 36, 5000: 62, 10000: 100, 25000: 200, 50000: 380 },
-                          premium: { 1000: 32, 2000: 50, 5000: 85, 10000: 135, 25000: 270, 50000: 500 } }
+                          premium: { 1000: 32, 2000: 50, 5000: 85, 10000: 135, 25000: 270, 50000: 500 } },
+                    'BI-FOLD': { budget: { 1000: 75, 2000: 100, 5000: 190, 10000: 350, 25000: 750, 50000: 1400 },
+                                 standard: { 1000: 75, 2000: 100, 5000: 190, 10000: 350, 25000: 750, 50000: 1400 },
+                                 premium: { 1000: 75, 2000: 100, 5000: 190, 10000: 350, 25000: 750, 50000: 1400 } }
                 };
 
                 this.standardAreas = ['PL2', 'PL5', 'PL6', 'PL7', 'PL9'];
@@ -1439,7 +1495,7 @@
                 return '1-4k';
             }
 
-            // Improved printing price calculation with better scaling
+            // Improved printing price calculation with better scaling and bi-fold support
             getPrintingPrice(quantity, size, stock, doubleSided) {
                 if (!size || !stock) return 0;
                 
@@ -1458,7 +1514,9 @@
                     basePrice = basePrice * scalingFactor;
                 }
                 
-                if (doubleSided) {
+                // Bi-fold is already 4-panel so doesn't get double-sided multiplier
+                // Other formats get double-sided pricing
+                if (doubleSided && size !== 'BI-FOLD') {
                     basePrice *= 1.3;
                 }
                 
@@ -1481,37 +1539,72 @@
                 }
             }
 
-            // Enhanced design/print mismatch checking
+            // Enhanced design/print mismatch checking with bi-fold logic
             checkDesignPrintMismatch() {
                 const designPrintMismatch = document.getElementById('design-print-mismatch');
                 const includePrinting = document.getElementById('include-printing').checked;
                 const printSides = document.getElementById('print-sides').value;
+                const paperSize = document.getElementById('paper-size').value;
                 
-                if (includePrinting && this.currentDesign === 'double' && printSides === 'single') {
+                // Clear previous warnings
+                designPrintMismatch.style.display = 'none';
+                
+                // Don't show any design warnings if no design is selected
+                if (!includePrinting || this.currentDesign === 'none') return;
+                
+                // Check for design/print side mismatch (not applicable to bi-fold)
+                if (paperSize !== 'BI-FOLD' && this.currentDesign === 'double' && printSides === 'single') {
+                    designPrintMismatch.textContent = '⚠️ You\'ve selected double-sided design but single-sided printing. Consider choosing double-sided printing to use your full design.';
                     designPrintMismatch.style.display = 'block';
-                } else {
-                    designPrintMismatch.style.display = 'none';
+                }
+                
+                // Check for bi-fold design/print mismatch
+                if (this.currentDesign === 'bifold' && paperSize && paperSize !== 'BI-FOLD') {
+                    designPrintMismatch.textContent = '⚠️ You\'ve selected bi-fold design but non-bi-fold printing. Consider choosing "Bi-Fold" paper size for your 4-panel design.';
+                    designPrintMismatch.style.display = 'block';
+                }
+                
+                // Check for non-bi-fold design with bi-fold printing (only if they chose a design service)
+                if (this.currentDesign !== 'bifold' && this.currentDesign !== 'none' && paperSize === 'BI-FOLD') {
+                    designPrintMismatch.textContent = '⚠️ You\'ve selected bi-fold printing but non-bi-fold design. Consider choosing "Bi-Fold Design" to fully utilize the 4-panel format.';
+                    designPrintMismatch.style.display = 'block';
                 }
             }
 
-            // Enhanced combined discount display
+            // Enhanced combined discount display with 50% distribution logic
             updateCombinedDiscountDisplay() {
                 const newCustomer = document.getElementById('new-customer').checked;
                 const annualContract = document.getElementById('annual-contract').checked;
                 const combinedInfo = document.getElementById('combined-discount-info');
+                const distributionDiscountActive = document.getElementById('distribution-discount-active');
                 
-                if (newCustomer && annualContract) {
-                    combinedInfo.style.display = 'block';
-                } else {
+                if (this.isDistributionOffer) {
                     combinedInfo.style.display = 'none';
+                    distributionDiscountActive.style.display = 'block';
+                    
+                    // Disable other discount checkboxes
+                    document.getElementById('new-customer-group').classList.add('disabled');
+                    document.getElementById('annual-contract-group').classList.add('disabled');
+                    document.getElementById('new-customer').checked = false;
+                    document.getElementById('annual-contract').checked = false;
+                } else {
+                    distributionDiscountActive.style.display = 'none';
+                    document.getElementById('new-customer-group').classList.remove('disabled');
+                    document.getElementById('annual-contract-group').classList.remove('disabled');
+                    
+                    if (newCustomer && annualContract) {
+                        combinedInfo.style.display = 'block';
+                    } else {
+                        combinedInfo.style.display = 'none';
+                    }
                 }
             }
 
             // Improved debounced calculation
             debouncedCalculate() {
-                // Don't reset special offer if we're in the middle of applying it
+                // Don't reset special offers if we're in the middle of applying them
                 if (!this.isApplyingSpecialOffer) {
-                    this.resetSpecialOffer();
+                    this.resetSpecialOffers();
                 }
                 
                 if (this.debounceTimer) {
@@ -1615,9 +1708,10 @@
 
             // Apply Special Offer function
             applySpecialOffer() {
-                // Set flag to prevent resetSpecialOffer during application
+                // Set flag to prevent resetSpecialOffers during application
                 this.isApplyingSpecialOffer = true;
                 this.isSpecialOffer = true;
+                this.isDistributionOffer = false; // Clear other offer
                 
                 // Set the special offer configuration
                 document.getElementById('quantity').value = 5000;
@@ -1636,10 +1730,10 @@
                 
                 document.getElementById('extended-areas').value = '';
                 
-                // Set design service
+                // Set design service back to double-sided A5
                 this.selectDesign('double');
                 
-                // Set printing options
+                // Set printing options back to A5 double-sided
                 document.getElementById('include-printing').checked = true;
                 this.togglePrintingOptions();
                 document.getElementById('paper-size').value = 'A5';
@@ -1656,7 +1750,7 @@
                 this.toggleMultiArea();
                 
                 // Show loading state on the offer button
-                const btn = document.querySelector('.offer-btn');
+                const btn = document.querySelector('.offer-btn:not(.distribution-offer)');
                 btn.classList.add('loading');
                 btn.disabled = true;
                 btn.textContent = '⚡ Applying Offer...';
@@ -1683,10 +1777,53 @@
                 }, 800);
             }
 
-            // Reset special offer flag when form changes
-            resetSpecialOffer() {
+            // Apply 50% Distribution Offer function
+            applyDistributionOffer() {
+                // Set flag to prevent resetSpecialOffers during application
+                this.isApplyingSpecialOffer = true;
+                this.isDistributionOffer = true;
+                this.isSpecialOffer = false; // Clear other offer
+                
+                // Don't change existing settings, just apply the discount
+                // Clear other discounts
+                document.getElementById('new-customer').checked = false;
+                document.getElementById('annual-contract').checked = false;
+                
+                // Show loading state on the distribution offer button
+                const btn = document.querySelector('.offer-btn.distribution-offer');
+                btn.classList.add('loading');
+                btn.disabled = true;
+                btn.textContent = '🔥 Applying 50% Off...';
+                
+                setTimeout(() => {
+                    // Clear the applying flag and calculate
+                    this.isApplyingSpecialOffer = false;
+                    
+                    btn.classList.remove('loading');
+                    btn.disabled = false;
+                    btn.textContent = '✅ 50% Off Applied!';
+                    btn.style.background = 'white';
+                    btn.style.color = '#dc2626';
+                    
+                    // Reset button after 3 seconds
+                    setTimeout(() => {
+                        btn.textContent = '🔥 Apply 50% Off';
+                        btn.style.background = 'white';
+                        btn.style.color = '#dc2626';
+                    }, 3000);
+                    
+                    // Update discount display
+                    this.updateCombinedDiscountDisplay();
+                    
+                    // Force immediate calculation
+                    this.calculatePrice();
+                }, 800);
+            }
+
+            // Reset special offers when form changes
+            resetSpecialOffers() {
                 if (this.isSpecialOffer) {
-                    // Check if current settings still match the special offer
+                    // Check if current settings still match the special offer (back to A5 double-sided)
                     const quantity = this.validateQuantity(document.getElementById('quantity').value, false);
                     const isStillSpecialOffer = quantity === 5000 && 
                         this.currentDesign === 'double' && 
@@ -1697,6 +1834,26 @@
                     if (!isStillSpecialOffer) {
                         this.isSpecialOffer = false;
                     }
+                }
+                
+                // Distribution offer doesn't depend on settings, so don't auto-reset it
+                // Users must manually deactivate it or apply another offer
+            }
+
+            handlePaperSizeChange() {
+                const paperSize = document.getElementById('paper-size').value;
+                const printSidesGroup = document.getElementById('print-sides-group');
+                const printSidesSelect = document.getElementById('print-sides');
+                const printSidesInfo = document.getElementById('print-sides-info');
+                
+                if (paperSize === 'BI-FOLD') {
+                    // Hide print sides option and auto-select double sided
+                    printSidesGroup.style.display = 'none';
+                    printSidesSelect.value = 'double';
+                } else {
+                    // Show print sides option for other paper types
+                    printSidesGroup.style.display = 'block';
+                    printSidesInfo.textContent = 'Choose single or double-sided printing';
                 }
             }
 
@@ -1710,6 +1867,11 @@
                     document.getElementById('paper-stock').value = '';
                     document.getElementById('paper-finish').value = '';
                     document.getElementById('print-sides').value = '';
+                    // Show print sides group when printing is disabled
+                    document.getElementById('print-sides-group').style.display = 'block';
+                } else {
+                    // Check if bi-fold is selected and handle accordingly
+                    this.handlePaperSizeChange();
                 }
                 
                 this.checkDesignPrintMismatch();
@@ -1719,10 +1881,13 @@
             isPrintingComplete() {
                 if (!document.getElementById('include-printing').checked) return true;
                 
-                return document.getElementById('paper-size').value !== '' &&
+                const paperSize = document.getElementById('paper-size').value;
+                const printSidesComplete = paperSize === 'BI-FOLD' ? true : document.getElementById('print-sides').value !== '';
+                
+                return paperSize !== '' &&
                        document.getElementById('paper-stock').value !== '' &&
                        document.getElementById('paper-finish').value !== '' &&
-                       document.getElementById('print-sides').value !== '';
+                       printSidesComplete;
             }
 
             toggleMultiArea() {
@@ -1892,7 +2057,12 @@
 
             updateMultiAreaTotal() {
                 const totalLeaflets = this.multiAreas.reduce((sum, area) => sum + area.quantity, 0);
-                const totalPrice = this.multiAreas.reduce((sum, area) => sum + area.price, 0);
+                let totalPrice = this.multiAreas.reduce((sum, area) => sum + area.price, 0);
+                
+                // Apply 50% distribution discount if active
+                if (this.isDistributionOffer) {
+                    totalPrice = totalPrice * 0.5;
+                }
                 
                 document.getElementById('total-leaflets').textContent = totalLeaflets.toLocaleString();
                 document.getElementById('multi-distribution-total').textContent = `£${totalPrice.toFixed(2)}`;
@@ -1938,36 +2108,23 @@
                     incompleteWarning.style.display = 'none';
                 }
 
-                // Apply discounts
-                const newCustomer = document.getElementById('new-customer').checked;
-                const annualContract = document.getElementById('annual-contract').checked;
-                
+                // For multi-area with distribution offer, discount is already applied to distributionTotal
                 let discountAmount = 0;
-                let discountPercent = 0;
                 let discountLabel = '';
-
-                if (newCustomer && annualContract) {
-                    discountPercent = 25;
-                    discountLabel = '25%';
-                } else if (newCustomer) {
-                    discountPercent = 15;
-                    discountLabel = '15%';
-                } else if (annualContract) {
-                    discountPercent = 12;
-                    discountLabel = '12%';
+                
+                if (this.isDistributionOffer) {
+                    // Calculate the original distribution total for display
+                    const originalDistributionTotal = distributionTotal * 2; // Since we already halved it
+                    discountAmount = originalDistributionTotal - distributionTotal;
+                    discountLabel = '50%';
                 }
 
-                if (discountPercent > 0) {
-                    discountAmount = distributionTotal * (discountPercent / 100);
-                }
-
-                const discountedDistribution = distributionTotal - discountAmount;
-                const finalTotal = discountedDistribution + designCost + printingCost;
+                const finalTotal = distributionTotal + designCost + printingCost;
                 const totalWithVAT = finalTotal * 1.2;
 
                 this.checkDesignPrintMismatch();
                 this.updateCombinedDiscountDisplay();
-                this.updateBreakdownDisplay(distributionTotal, designCost, printingCost, printingComplete, discountAmount, discountLabel, finalTotal, totalWithVAT, totalQuantity);
+                this.updateBreakdownDisplay(this.isDistributionOffer ? distributionTotal * 2 : distributionTotal, designCost, printingCost, printingComplete, discountAmount, discountLabel, finalTotal, totalWithVAT, totalQuantity);
             }
 
             updateAreaIndicator(areaType) {
@@ -2035,10 +2192,20 @@
 
                 // Discount breakdown
                 const discountBreakdown = document.getElementById('discount-breakdown');
+                const discountBadge = document.getElementById('discount-badge');
                 if (discountAmount > 0) {
                     discountBreakdown.style.display = 'flex';
                     document.getElementById('discount-amount').textContent = `-£${discountAmount.toFixed(2)}`;
-                    document.getElementById('discount-badge').textContent = discountLabel;
+                    discountBadge.textContent = discountLabel;
+                    
+                    // Style the badge based on discount type
+                    if (this.isDistributionOffer) {
+                        discountBadge.classList.add('distribution-discount');
+                        discountBadge.classList.remove('discount-badge');
+                    } else {
+                        discountBadge.classList.remove('distribution-discount');
+                        discountBadge.classList.add('discount-badge');
+                    }
                 } else {
                     discountBreakdown.style.display = 'none';
                 }
@@ -2069,7 +2236,7 @@
                 const quantity = this.validateQuantity(quantityInput.value);
                 quantityInput.value = quantity;
                 
-                // Check for special offer conditions FIRST
+                // Check for special offer conditions FIRST (back to A5 double-sided)
                 const isSpecialOfferConditions = quantity === 5000 && 
                     this.currentDesign === 'double' && 
                     document.getElementById('include-printing').checked && 
@@ -2168,7 +2335,11 @@
                 let discountPercent = 0;
                 let discountLabel = '';
 
-                if (newCustomer && annualContract) {
+                if (this.isDistributionOffer) {
+                    // 50% off distribution - overrides other discounts
+                    discountPercent = 50;
+                    discountLabel = '50%';
+                } else if (newCustomer && annualContract) {
                     discountPercent = 25;
                     discountLabel = '25%';
                 } else if (newCustomer) {
@@ -2231,14 +2402,20 @@
                     }
                     
                     let discountInfo = 'None';
-                    const newCustomer = document.getElementById('new-customer').checked;
-                    const annualContract = document.getElementById('annual-contract').checked;
-                    if (newCustomer && annualContract) {
-                        discountInfo = 'Combined Discount (25%)';
-                    } else if (newCustomer) {
-                        discountInfo = 'New Customer (15%)';
-                    } else if (annualContract) {
-                        discountInfo = 'Annual Contract (12%)';
+                    if (this.isSpecialOffer) {
+                        discountInfo = 'Launch Special Package';
+                    } else if (this.isDistributionOffer) {
+                        discountInfo = '50% Distribution Discount';
+                    } else {
+                        const newCustomer = document.getElementById('new-customer').checked;
+                        const annualContract = document.getElementById('annual-contract').checked;
+                        if (newCustomer && annualContract) {
+                            discountInfo = 'Combined Discount (25%)';
+                        } else if (newCustomer) {
+                            discountInfo = 'New Customer (15%)';
+                        } else if (annualContract) {
+                            discountInfo = 'Annual Contract (12%)';
+                        }
                     }
                     
                     const now = new Date();
@@ -2331,14 +2508,20 @@ Web: pdqleaflets.co.uk`;
                     }
                     
                     let discountInfo = 'None';
-                    const newCustomer = document.getElementById('new-customer').checked;
-                    const annualContract = document.getElementById('annual-contract').checked;
-                    if (newCustomer && annualContract) {
-                        discountInfo = 'Combined Discount (25%)';
-                    } else if (newCustomer) {
-                        discountInfo = 'New Customer (15%)';
-                    } else if (annualContract) {
-                        discountInfo = 'Annual Contract (12%)';
+                    if (this.isSpecialOffer) {
+                        discountInfo = 'Launch Special Package';
+                    } else if (this.isDistributionOffer) {
+                        discountInfo = '50% Distribution Discount';
+                    } else {
+                        const newCustomer = document.getElementById('new-customer').checked;
+                        const annualContract = document.getElementById('annual-contract').checked;
+                        if (newCustomer && annualContract) {
+                            discountInfo = 'Combined Discount (25%)';
+                        } else if (newCustomer) {
+                            discountInfo = 'New Customer (15%)';
+                        } else if (annualContract) {
+                            discountInfo = 'Annual Contract (12%)';
+                        }
                     }
                     
                     const now = new Date();
@@ -2438,20 +2621,31 @@ Web: pdqleaflets.co.uk`;
                 });
                 this.addEventListener(document.getElementById('include-printing'), 'change', () => this.togglePrintingOptions());
                 
-                // Printing option listeners
+                // Printing option listeners with bi-fold auto-selection
                 ['paper-size', 'paper-stock', 'paper-finish', 'print-sides'].forEach(id => {
                     this.addEventListener(document.getElementById(id), 'change', () => {
+                        if (id === 'paper-size') {
+                            this.handlePaperSizeChange();
+                        }
                         this.checkDesignPrintMismatch();
                         this.debouncedCalculate();
                     });
                 });
                 
-                // Discount listeners
+                // Discount listeners - modified to handle distribution offer
                 this.addEventListener(document.getElementById('new-customer'), 'change', () => {
+                    if (this.isDistributionOffer) {
+                        document.getElementById('new-customer').checked = false;
+                        return;
+                    }
                     this.updateCombinedDiscountDisplay();
                     this.debouncedCalculate();
                 });
                 this.addEventListener(document.getElementById('annual-contract'), 'change', () => {
+                    if (this.isDistributionOffer) {
+                        document.getElementById('annual-contract').checked = false;
+                        return;
+                    }
                     this.updateCombinedDiscountDisplay();
                     this.debouncedCalculate();
                 });
@@ -2490,6 +2684,10 @@ Web: pdqleaflets.co.uk`;
             calculator.applySpecialOffer();
         }
 
+        function applyDistributionOffer() {
+            calculator.applyDistributionOffer();
+        }
+
         function togglePrintingOptions() {
             calculator.togglePrintingOptions();
         }
@@ -2510,7 +2708,7 @@ Web: pdqleaflets.co.uk`;
         document.addEventListener('DOMContentLoaded', function() {
             try {
                 calculator = new QuoteCalculator();
-                console.log('Enhanced PDQ Calculator loaded successfully');
+                console.log('Enhanced PDQ Calculator with 50% Distribution Offer loaded successfully');
             } catch (error) {
                 console.error('Error initializing Enhanced PDQ Calculator:', error);
                 // Fallback to basic functionality if enhanced version fails
