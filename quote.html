@@ -1123,7 +1123,7 @@
                             <!-- Cheapest Option Button -->
                             <div style="margin-top: 15px; text-align: center;">
                                 <button class="cheapest-btn" onclick="setCheapestOption()">
-                                    💰 Pick Standard Area - Cheapest Option
+                                    💰 Pick Standard Area (Cheapest)
                                 </button>
                             </div>
                         </div>
@@ -1407,12 +1407,11 @@
                 this.selectedArea = 'PL2';
                 this.isMultiArea = false;
                 this.multiAreas = [];
-                this.eventListeners = new Map();
-                this.isSpecialOffer = false; // Track if special offer is applied
-                this.isDistributionOffer = false; // Track if 50% distribution offer is applied
-                this.isApplyingSpecialOffer = false; // Track if we're in the middle of applying special offer
+                this.isSpecialOffer = false;
+                this.isDistributionOffer = false;
+                this.isApplyingSpecialOffer = false;
                 
-                // Pricing data with improved structure
+                // FIXED: Bi-fold printing prices now differentiate by paper stock
                 this.pricingData = {
                     standard: {
                         standard: { '1-4k': 58, '5-9k': 55, '10-24k': 51, '25-49k': 47, '50k+': 44 },
@@ -1424,7 +1423,8 @@
                     }
                 };
 
-                // Improved printing prices with better scaling including bi-fold
+                // FIXED: Bi-fold now has differentiated pricing by paper stock
+                // Budget uses original pricing, Standard gets 15% uplift, Premium gets 35% uplift
                 this.printingPrices = {
                     A6: { budget: { 1000: 15, 2000: 25, 5000: 45, 10000: 75, 25000: 150, 50000: 280 },
                           standard: { 1000: 20, 2000: 32, 5000: 58, 10000: 95, 25000: 190, 50000: 350 },
@@ -1438,9 +1438,11 @@
                     DL: { budget: { 1000: 16, 2000: 28, 5000: 48, 10000: 78, 25000: 155, 50000: 290 },
                           standard: { 1000: 22, 2000: 36, 5000: 62, 10000: 100, 25000: 200, 50000: 380 },
                           premium: { 1000: 32, 2000: 50, 5000: 85, 10000: 135, 25000: 270, 50000: 500 } },
-                    'BI-FOLD': { budget: { 1000: 75, 2000: 100, 5000: 190, 10000: 350, 25000: 750, 50000: 1400 },
-                                 standard: { 1000: 75, 2000: 100, 5000: 190, 10000: 350, 25000: 750, 50000: 1400 },
-                                 premium: { 1000: 75, 2000: 100, 5000: 190, 10000: 350, 25000: 750, 50000: 1400 } }
+                    'BI-FOLD': { 
+                        budget: { 1000: 75, 2000: 100, 5000: 190, 10000: 350, 25000: 750, 50000: 1400 },
+                        standard: { 1000: 86, 2000: 115, 5000: 219, 10000: 403, 25000: 863, 50000: 1610 },
+                        premium: { 1000: 101, 2000: 135, 5000: 257, 10000: 473, 25000: 1013, 50000: 1890 }
+                    }
                 };
 
                 this.standardAreas = ['PL2', 'PL5', 'PL6', 'PL7', 'PL9'];
@@ -1455,28 +1457,37 @@
                 this.initializeEventListeners();
                 this.setInitialState();
                 this.calculatePrice();
-                console.log('Enhanced PDQ Calculator initialized successfully');
+                console.log('Enhanced PDQ Calculator initialized successfully with fixes');
             }
 
-            // Improved quantity validation with better error handling
+            // FIXED: Improved quantity validation that doesn't auto-correct while typing
             validateQuantity(value, showError = true) {
                 const num = parseInt(value) || 0;
                 const errorElement = showError ? document.getElementById('quantity-error') : null;
                 
-                if (num < 1000) {
+                // Don't auto-correct if user is still typing (field is empty or contains partial input)
+                if (value === '' || value === '0' || (num > 0 && num < 1000)) {
                     if (errorElement) {
-                        errorElement.style.display = 'block';
-                        errorElement.closest('.form-group').querySelector('input').classList.add('input-error');
+                        if (num > 0 && num < 1000) {
+                            errorElement.style.display = 'block';
+                            errorElement.closest('.form-group').querySelector('input').classList.add('input-error');
+                        } else {
+                            errorElement.style.display = 'none';
+                            errorElement.closest('.form-group').querySelector('input').classList.remove('input-error');
+                        }
                     }
-                    return 1000;
-                } else {
+                    return num; // Return the actual value, don't auto-correct
+                }
+                
+                if (num >= 1000) {
                     if (errorElement) {
                         errorElement.style.display = 'none';
                         errorElement.closest('.form-group').querySelector('input').classList.remove('input-error');
                     }
+                    return Math.ceil(num / 1000) * 1000; // Round up to nearest 1000
                 }
                 
-                return Math.ceil(num / 1000) * 1000;
+                return num;
             }
 
             getAreaType(areaCode) {
@@ -1495,7 +1506,7 @@
                 return '1-4k';
             }
 
-            // Improved printing price calculation with better scaling and bi-fold support
+            // FIXED: Improved printing price calculation with proper bi-fold support
             getPrintingPrice(quantity, size, stock, doubleSided) {
                 if (!size || !stock) return 0;
                 
@@ -1509,7 +1520,6 @@
                 // Improved scaling with more consistent pricing
                 if (quantity !== closestQty && basePrice > 0) {
                     const ratio = quantity / closestQty;
-                    // Use more conservative scaling for better pricing consistency
                     const scalingFactor = ratio > 1 ? Math.pow(ratio, 0.75) : Math.pow(ratio, 0.9);
                     basePrice = basePrice * scalingFactor;
                 }
@@ -1523,14 +1533,16 @@
                 return Math.round(basePrice);
             }
 
-            // Enhanced duplicate area checking
+            // FIXED: Enhanced duplicate area checking with better state management
             checkDuplicateAreas(newAreaCode, excludeId = null) {
+                if (!newAreaCode) return false;
+                
                 const duplicateExists = this.multiAreas.some(area => 
                     area.area === newAreaCode && area.id !== excludeId
                 );
                 
                 const warningElement = document.getElementById('duplicate-area-warning');
-                if (duplicateExists && newAreaCode) {
+                if (duplicateExists) {
                     warningElement.style.display = 'block';
                     return true;
                 } else {
@@ -1546,10 +1558,8 @@
                 const printSides = document.getElementById('print-sides').value;
                 const paperSize = document.getElementById('paper-size').value;
                 
-                // Clear previous warnings
                 designPrintMismatch.style.display = 'none';
                 
-                // Don't show any design warnings if no design is selected
                 if (!includePrinting || this.currentDesign === 'none') return;
                 
                 // Check for design/print side mismatch (not applicable to bi-fold)
@@ -1564,14 +1574,14 @@
                     designPrintMismatch.style.display = 'block';
                 }
                 
-                // Check for non-bi-fold design with bi-fold printing (only if they chose a design service)
+                // Check for non-bi-fold design with bi-fold printing
                 if (this.currentDesign !== 'bifold' && this.currentDesign !== 'none' && paperSize === 'BI-FOLD') {
                     designPrintMismatch.textContent = '⚠️ You\'ve selected bi-fold printing but non-bi-fold design. Consider choosing "Bi-Fold Design" to fully utilize the 4-panel format.';
                     designPrintMismatch.style.display = 'block';
                 }
             }
 
-            // Enhanced combined discount display with 50% distribution logic
+            // FIXED: Enhanced combined discount display with better state management
             updateCombinedDiscountDisplay() {
                 const newCustomer = document.getElementById('new-customer').checked;
                 const annualContract = document.getElementById('annual-contract').checked;
@@ -1582,7 +1592,7 @@
                     combinedInfo.style.display = 'none';
                     distributionDiscountActive.style.display = 'block';
                     
-                    // Disable other discount checkboxes
+                    // Disable other discount checkboxes when distribution offer is active
                     document.getElementById('new-customer-group').classList.add('disabled');
                     document.getElementById('annual-contract-group').classList.add('disabled');
                     document.getElementById('new-customer').checked = false;
@@ -1600,9 +1610,8 @@
                 }
             }
 
-            // Improved debounced calculation
+            // FIXED: Improved debounced calculation with better race condition prevention
             debouncedCalculate() {
-                // Don't reset special offers if we're in the middle of applying them
                 if (!this.isApplyingSpecialOffer) {
                     this.resetSpecialOffers();
                 }
@@ -1612,7 +1621,9 @@
                 }
                 
                 this.debounceTimer = setTimeout(() => {
-                    this.calculatePrice();
+                    if (!this.isCalculating) {
+                        this.calculatePrice();
+                    }
                 }, 150);
             }
 
@@ -1662,19 +1673,15 @@
                 this.debouncedCalculate();
             }
 
-            // Updated "Best Value" calculation that randomly picks a standard area
             setCheapestOption() {
-                // Pick a random standard area (they all have the same price)
                 const randomIndex = Math.floor(Math.random() * this.standardAreas.length);
                 const randomStandardArea = this.standardAreas[randomIndex];
                 
                 this.selectedArea = randomStandardArea;
                 
-                // Update form values with defaults
                 document.getElementById('quantity').value = 1000;
                 document.getElementById('delivery-type').value = 'standard';
                 
-                // Update postcode selections
                 document.querySelectorAll('.postcode-btn').forEach(btn => {
                     btn.classList.remove('selected');
                 });
@@ -1687,14 +1694,12 @@
                 document.getElementById('include-printing').checked = false;
                 this.togglePrintingOptions();
                 
-                // Apply new customer discount for best price
                 document.getElementById('new-customer').checked = true;
                 document.getElementById('annual-contract').checked = false;
                 
                 document.getElementById('multi-area-mode').checked = false;
                 this.toggleMultiArea();
                 
-                // Show loading state
                 const btn = document.querySelector('.cheapest-btn');
                 btn.classList.add('loading');
                 btn.disabled = true;
@@ -1706,23 +1711,18 @@
                 }, 500);
             }
 
-            // Apply Special Offer function
             applySpecialOffer() {
-                // Set flag to prevent resetSpecialOffers during application
                 this.isApplyingSpecialOffer = true;
                 this.isSpecialOffer = true;
-                this.isDistributionOffer = false; // Clear other offer
+                this.isDistributionOffer = false;
                 
-                // Set the special offer configuration
                 document.getElementById('quantity').value = 5000;
                 document.getElementById('delivery-type').value = 'standard';
                 
-                // Pick a random standard area for best price
                 const randomIndex = Math.floor(Math.random() * this.standardAreas.length);
                 const randomStandardArea = this.standardAreas[randomIndex];
                 this.selectedArea = randomStandardArea;
                 
-                // Update postcode selections
                 document.querySelectorAll('.postcode-btn').forEach(btn => {
                     btn.classList.remove('selected');
                 });
@@ -1730,10 +1730,8 @@
                 
                 document.getElementById('extended-areas').value = '';
                 
-                // Set design service back to double-sided A5
                 this.selectDesign('double');
                 
-                // Set printing options back to A5 double-sided
                 document.getElementById('include-printing').checked = true;
                 this.togglePrintingOptions();
                 document.getElementById('paper-size').value = 'A5';
@@ -1741,22 +1739,18 @@
                 document.getElementById('paper-finish').value = 'matte';
                 document.getElementById('print-sides').value = 'double';
                 
-                // Clear discounts for the special offer
                 document.getElementById('new-customer').checked = false;
                 document.getElementById('annual-contract').checked = false;
                 
-                // Ensure single area mode
                 document.getElementById('multi-area-mode').checked = false;
                 this.toggleMultiArea();
                 
-                // Show loading state on the offer button
                 const btn = document.querySelector('.offer-btn:not(.distribution-offer)');
                 btn.classList.add('loading');
                 btn.disabled = true;
                 btn.textContent = '⚡ Applying Offer...';
                 
                 setTimeout(() => {
-                    // Clear the applying flag and calculate
                     this.isApplyingSpecialOffer = false;
                     
                     btn.classList.remove('loading');
@@ -1765,38 +1759,30 @@
                     btn.style.background = '#10b981';
                     btn.style.color = 'white';
                     
-                    // Reset button after 3 seconds
                     setTimeout(() => {
                         btn.textContent = '⚡ Apply This Offer';
                         btn.style.background = 'white';
                         btn.style.color = '#10b981';
                     }, 3000);
                     
-                    // Force immediate calculation
                     this.calculatePrice();
                 }, 800);
             }
 
-            // Apply 50% Distribution Offer function
             applyDistributionOffer() {
-                // Set flag to prevent resetSpecialOffers during application
                 this.isApplyingSpecialOffer = true;
                 this.isDistributionOffer = true;
-                this.isSpecialOffer = false; // Clear other offer
+                this.isSpecialOffer = false;
                 
-                // Don't change existing settings, just apply the discount
-                // Clear other discounts
                 document.getElementById('new-customer').checked = false;
                 document.getElementById('annual-contract').checked = false;
                 
-                // Show loading state on the distribution offer button
                 const btn = document.querySelector('.offer-btn.distribution-offer');
                 btn.classList.add('loading');
                 btn.disabled = true;
                 btn.textContent = '🔥 Applying 50% Off...';
                 
                 setTimeout(() => {
-                    // Clear the applying flag and calculate
                     this.isApplyingSpecialOffer = false;
                     
                     btn.classList.remove('loading');
@@ -1805,25 +1791,19 @@
                     btn.style.background = 'white';
                     btn.style.color = '#dc2626';
                     
-                    // Reset button after 3 seconds
                     setTimeout(() => {
                         btn.textContent = '🔥 Apply 50% Off';
                         btn.style.background = 'white';
                         btn.style.color = '#dc2626';
                     }, 3000);
                     
-                    // Update discount display
                     this.updateCombinedDiscountDisplay();
-                    
-                    // Force immediate calculation
                     this.calculatePrice();
                 }, 800);
             }
 
-            // Reset special offers when form changes
             resetSpecialOffers() {
                 if (this.isSpecialOffer) {
-                    // Check if current settings still match the special offer (back to A5 double-sided)
                     const quantity = this.validateQuantity(document.getElementById('quantity').value, false);
                     const isStillSpecialOffer = quantity === 5000 && 
                         this.currentDesign === 'double' && 
@@ -1835,9 +1815,6 @@
                         this.isSpecialOffer = false;
                     }
                 }
-                
-                // Distribution offer doesn't depend on settings, so don't auto-reset it
-                // Users must manually deactivate it or apply another offer
             }
 
             handlePaperSizeChange() {
@@ -1847,11 +1824,9 @@
                 const printSidesInfo = document.getElementById('print-sides-info');
                 
                 if (paperSize === 'BI-FOLD') {
-                    // Hide print sides option and auto-select double sided
                     printSidesGroup.style.display = 'none';
                     printSidesSelect.value = 'double';
                 } else {
-                    // Show print sides option for other paper types
                     printSidesGroup.style.display = 'block';
                     printSidesInfo.textContent = 'Choose single or double-sided printing';
                 }
@@ -1867,10 +1842,8 @@
                     document.getElementById('paper-stock').value = '';
                     document.getElementById('paper-finish').value = '';
                     document.getElementById('print-sides').value = '';
-                    // Show print sides group when printing is disabled
                     document.getElementById('print-sides-group').style.display = 'block';
                 } else {
-                    // Check if bi-fold is selected and handle accordingly
                     this.handlePaperSizeChange();
                 }
                 
@@ -1907,7 +1880,6 @@
                     singleSection.style.display = 'block';
                     multiSection.style.display = 'none';
                     
-                    // Clean up multi-area data
                     this.multiAreas = [];
                     document.getElementById('multi-area-list').innerHTML = '';
                     document.getElementById('duplicate-area-warning').style.display = 'none';
@@ -2008,6 +1980,7 @@
                 this.updateMultiAreaTotal();
             }
 
+            // FIXED: Enhanced multi-area update with better validation
             updateMultiArea(areaId) {
                 const row = document.getElementById(areaId);
                 if (!row) return;
@@ -2023,14 +1996,18 @@
                 
                 const inputValue = inputs[0].value;
                 const quantity = this.validateQuantity(inputValue, false);
-                inputs[0].value = quantity;
+                
+                // Only update input value if quantity is valid (>= 1000)
+                if (quantity >= 1000) {
+                    inputs[0].value = quantity;
+                }
                 
                 const areaIndex = this.multiAreas.findIndex(a => a.id === areaId);
                 if (areaIndex !== -1) {
                     this.multiAreas[areaIndex].area = area;
-                    this.multiAreas[areaIndex].quantity = quantity;
+                    this.multiAreas[areaIndex].quantity = Math.max(quantity, 1000);
                     
-                    if (area && quantity > 0) {
+                    if (area && quantity >= 1000) {
                         const deliveryType = document.getElementById('multi-delivery-type').value;
                         const areaType = this.getAreaType(area);
                         const isExtended = areaType && areaType.includes('extended');
@@ -2059,7 +2036,6 @@
                 const totalLeaflets = this.multiAreas.reduce((sum, area) => sum + area.quantity, 0);
                 let totalPrice = this.multiAreas.reduce((sum, area) => sum + area.price, 0);
                 
-                // Apply 50% distribution discount if active
                 if (this.isDistributionOffer) {
                     totalPrice = totalPrice * 0.5;
                 }
@@ -2080,7 +2056,6 @@
             }
 
             calculateMultiAreaPrice(distributionTotal, totalQuantity) {
-                // Calculate design cost
                 let designCost = 0;
                 const includeSourceFiles = document.getElementById('source-files').checked;
                 if (this.currentDesign === 'single') designCost = 50;
@@ -2088,7 +2063,6 @@
                 if (this.currentDesign === 'bifold') designCost = 90;
                 if (includeSourceFiles && this.currentDesign !== 'none') designCost += 25;
 
-                // Calculate printing cost using total quantity
                 let printingCost = 0;
                 const includePrinting = document.getElementById('include-printing').checked;
                 let printingComplete = this.isPrintingComplete();
@@ -2100,7 +2074,6 @@
                     printingCost = this.getPrintingPrice(totalQuantity, paperSize, paperStock, doubleSided);
                 }
 
-                // Show/hide printing incomplete warning
                 const incompleteWarning = document.getElementById('printing-incomplete');
                 if (includePrinting && !printingComplete) {
                     incompleteWarning.style.display = 'block';
@@ -2108,13 +2081,11 @@
                     incompleteWarning.style.display = 'none';
                 }
 
-                // For multi-area with distribution offer, discount is already applied to distributionTotal
                 let discountAmount = 0;
                 let discountLabel = '';
                 
                 if (this.isDistributionOffer) {
-                    // Calculate the original distribution total for display
-                    const originalDistributionTotal = distributionTotal * 2; // Since we already halved it
+                    const originalDistributionTotal = distributionTotal * 2;
                     discountAmount = originalDistributionTotal - distributionTotal;
                     discountLabel = '50%';
                 }
@@ -2157,7 +2128,6 @@
             }
 
             updateBreakdownDisplay(distributionTotal, designCost, printingCost, printingComplete, discountAmount, discountLabel, finalTotal, totalWithVAT, totalQuantity = null) {
-                // Get total quantity for per-leaflet calculation
                 let quantity = totalQuantity;
                 if (!quantity) {
                     if (this.isMultiArea) {
@@ -2167,12 +2137,10 @@
                     }
                 }
 
-                // Reset breakdown label to default
                 document.querySelector('#distribution-cost').closest('.breakdown-item').querySelector('.breakdown-label').textContent = 'Distribution';
 
                 document.getElementById('distribution-cost').textContent = `£${distributionTotal.toFixed(2)}`;
                 
-                // Design breakdown
                 const designBreakdown = document.getElementById('design-breakdown');
                 if (designCost > 0) {
                     designBreakdown.style.display = 'flex';
@@ -2181,7 +2149,6 @@
                     designBreakdown.style.display = 'none';
                 }
 
-                // Printing breakdown
                 const printingBreakdown = document.getElementById('printing-breakdown');
                 if (printingCost > 0 && printingComplete) {
                     printingBreakdown.style.display = 'flex';
@@ -2190,7 +2157,6 @@
                     printingBreakdown.style.display = 'none';
                 }
 
-                // Discount breakdown
                 const discountBreakdown = document.getElementById('discount-breakdown');
                 const discountBadge = document.getElementById('discount-badge');
                 if (discountAmount > 0) {
@@ -2198,7 +2164,6 @@
                     document.getElementById('discount-amount').textContent = `-£${discountAmount.toFixed(2)}`;
                     discountBadge.textContent = discountLabel;
                     
-                    // Style the badge based on discount type
                     if (this.isDistributionOffer) {
                         discountBadge.classList.add('distribution-discount');
                         discountBadge.classList.remove('discount-badge');
@@ -2210,161 +2175,155 @@
                     discountBreakdown.style.display = 'none';
                 }
 
-                // Totals
                 document.getElementById('total-ex-vat').textContent = `£${finalTotal.toFixed(2)}`;
                 document.getElementById('quote-total').textContent = `£${finalTotal.toFixed(2)}`;
                 document.getElementById('quote-vat').textContent = `£${totalWithVAT.toFixed(2)} inc. VAT`;
                 
-                // Per-leaflet cost
                 const perLeaflet = quantity > 0 ? finalTotal / quantity : 0;
                 document.getElementById('per-leaflet').textContent = `£${perLeaflet.toFixed(3)} per leaflet`;
             }
 
+            // FIXED: Enhanced calculation with better state management and race condition prevention
             calculatePrice() {
                 if (this.isCalculating) return;
                 this.isCalculating = true;
 
-                // Skip calculation if in multi-area mode
-                if (this.isMultiArea) {
-                    this.updateMultiAreaTotal();
+                try {
+                    if (this.isMultiArea) {
+                        this.updateMultiAreaTotal();
+                        return;
+                    }
+                    
+                    const quantityInput = document.getElementById('quantity');
+                    let quantity = this.validateQuantity(quantityInput.value);
+                    
+                    // Only update input value if quantity is valid and different
+                    if (quantity >= 1000 && quantity !== parseInt(quantityInput.value)) {
+                        quantityInput.value = quantity;
+                    } else if (quantity < 1000) {
+                        quantity = Math.max(quantity, 1000); // Use 1000 for calculations but don't update input
+                    }
+                    
+                    const isSpecialOfferConditions = quantity === 5000 && 
+                        this.currentDesign === 'double' && 
+                        document.getElementById('include-printing').checked && 
+                        document.getElementById('paper-size').value === 'A5' &&
+                        document.getElementById('print-sides').value === 'double' &&
+                        this.isSpecialOffer;
+
+                    if (isSpecialOfferConditions) {
+                        const specialOfferPrice = 200;
+                        const regularPrice = 438;
+                        const savingsAmount = regularPrice - specialOfferPrice;
+                        const savingsPercent = Math.round((savingsAmount / regularPrice) * 100);
+                        const specialOfferWithVAT = specialOfferPrice * 1.2;
+                        const perLeaflet = specialOfferPrice / quantity;
+
+                        document.getElementById('distribution-cost').innerHTML = `
+                            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                                <span style="text-decoration: line-through; opacity: 0.6; font-size: 0.85rem;">£${regularPrice.toFixed(2)}</span>
+                                <span>£${specialOfferPrice.toFixed(2)}</span>
+                                <span style="color: #10b981; font-size: 0.8rem; font-weight: 700;">SAVE £${savingsAmount} (${savingsPercent}%)</span>
+                            </div>
+                        `;
+                        
+                        document.getElementById('design-breakdown').style.display = 'none';
+                        document.getElementById('printing-breakdown').style.display = 'none';
+                        document.getElementById('discount-breakdown').style.display = 'none';
+                        
+                        document.querySelector('#distribution-cost').closest('.breakdown-item').querySelector('.breakdown-label').textContent = 'Launch Special Package';
+                        
+                        document.getElementById('total-ex-vat').textContent = `£${specialOfferPrice.toFixed(2)}`;
+                        document.getElementById('quote-total').textContent = `£${specialOfferPrice.toFixed(2)}`;
+                        document.getElementById('quote-vat').textContent = `£${specialOfferWithVAT.toFixed(2)} inc. VAT`;
+                        document.getElementById('per-leaflet').textContent = `£${perLeaflet.toFixed(3)} per leaflet`;
+                        
+                        return;
+                    }
+
+                    // Regular pricing calculation
+                    const deliveryType = document.getElementById('delivery-type').value;
+                    const includePrinting = document.getElementById('include-printing').checked;
+                    const newCustomer = document.getElementById('new-customer').checked;
+                    const annualContract = document.getElementById('annual-contract').checked;
+                    const includeSourceFiles = document.getElementById('source-files').checked;
+
+                    const areaType = this.getAreaType(this.selectedArea);
+                    this.updateAreaIndicator(areaType);
+
+                    const isExtended = areaType && areaType.includes('extended');
+                    const baseAreaType = areaType ? areaType.replace('-extended', '') : 'standard';
+                    const quantityTier = this.getQuantityTier(quantity);
+
+                    let distributionPrice = this.pricingData[baseAreaType][deliveryType][quantityTier];
+                    if (isExtended) {
+                        distributionPrice += 8;
+                    }
+
+                    const distributionTotal = (distributionPrice * quantity / 1000);
+
+                    let designCost = 0;
+                    if (this.currentDesign === 'single') designCost = 50;
+                    if (this.currentDesign === 'double') designCost = 75;
+                    if (this.currentDesign === 'bifold') designCost = 90;
+                    if (includeSourceFiles && this.currentDesign !== 'none') designCost += 25;
+
+                    let printingCost = 0;
+                    let printingComplete = this.isPrintingComplete();
+                    
+                    if (includePrinting && printingComplete) {
+                        const paperSize = document.getElementById('paper-size').value;
+                        const paperStock = document.getElementById('paper-stock').value;
+                        const doubleSided = document.getElementById('print-sides').value === 'double';
+                        printingCost = this.getPrintingPrice(quantity, paperSize, paperStock, doubleSided);
+                    }
+
+                    const incompleteWarning = document.getElementById('printing-incomplete');
+                    if (includePrinting && !printingComplete) {
+                        incompleteWarning.style.display = 'block';
+                    } else {
+                        incompleteWarning.style.display = 'none';
+                    }
+
+                    this.checkDesignPrintMismatch();
+
+                    let discountAmount = 0;
+                    let discountPercent = 0;
+                    let discountLabel = '';
+
+                    if (this.isDistributionOffer) {
+                        discountPercent = 50;
+                        discountLabel = '50%';
+                    } else if (newCustomer && annualContract) {
+                        discountPercent = 25;
+                        discountLabel = '25%';
+                    } else if (newCustomer) {
+                        discountPercent = 15;
+                        discountLabel = '15%';
+                    } else if (annualContract) {
+                        discountPercent = 12;
+                        discountLabel = '12%';
+                    }
+
+                    if (discountPercent > 0) {
+                        discountAmount = distributionTotal * (discountPercent / 100);
+                    }
+
+                    const discountedDistribution = distributionTotal - discountAmount;
+                    const finalTotal = discountedDistribution + designCost + printingCost;
+                    const totalWithVAT = finalTotal * 1.2;
+
+                    this.updateCombinedDiscountDisplay();
+                    this.updateBreakdownDisplay(distributionTotal, designCost, printingCost, printingComplete, discountAmount, discountLabel, finalTotal, totalWithVAT, quantity);
+                
+                } catch (error) {
+                    console.error('Error in price calculation:', error);
+                } finally {
                     this.isCalculating = false;
-                    return;
                 }
-                
-                // Get and validate quantity
-                const quantityInput = document.getElementById('quantity');
-                const quantity = this.validateQuantity(quantityInput.value);
-                quantityInput.value = quantity;
-                
-                // Check for special offer conditions FIRST (back to A5 double-sided)
-                const isSpecialOfferConditions = quantity === 5000 && 
-                    this.currentDesign === 'double' && 
-                    document.getElementById('include-printing').checked && 
-                    document.getElementById('paper-size').value === 'A5' &&
-                    document.getElementById('print-sides').value === 'double' &&
-                    this.isSpecialOffer;
-
-                if (isSpecialOfferConditions) {
-                    // Apply special offer pricing directly
-                    const specialOfferPrice = 200;
-                    const regularPrice = 438;
-                    const savingsAmount = regularPrice - specialOfferPrice;
-                    const savingsPercent = Math.round((savingsAmount / regularPrice) * 100);
-                    const specialOfferWithVAT = specialOfferPrice * 1.2;
-                    const perLeaflet = specialOfferPrice / quantity;
-
-                    // Update all displays with special pricing
-                    document.getElementById('distribution-cost').innerHTML = `
-                        <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                            <span style="text-decoration: line-through; opacity: 0.6; font-size: 0.85rem;">£${regularPrice.toFixed(2)}</span>
-                            <span>£${specialOfferPrice.toFixed(2)}</span>
-                            <span style="color: #10b981; font-size: 0.8rem; font-weight: 700;">SAVE £${savingsAmount} (${savingsPercent}%)</span>
-                        </div>
-                    `;
-                    
-                    // Hide individual breakdowns
-                    document.getElementById('design-breakdown').style.display = 'none';
-                    document.getElementById('printing-breakdown').style.display = 'none';
-                    document.getElementById('discount-breakdown').style.display = 'none';
-                    
-                    // Update breakdown label
-                    document.querySelector('#distribution-cost').closest('.breakdown-item').querySelector('.breakdown-label').textContent = 'Launch Special Package';
-                    
-                    // Update totals
-                    document.getElementById('total-ex-vat').textContent = `£${specialOfferPrice.toFixed(2)}`;
-                    document.getElementById('quote-total').textContent = `£${specialOfferPrice.toFixed(2)}`;
-                    document.getElementById('quote-vat').textContent = `£${specialOfferWithVAT.toFixed(2)} inc. VAT`;
-                    document.getElementById('per-leaflet').textContent = `£${perLeaflet.toFixed(3)} per leaflet`;
-                    
-                    this.isCalculating = false;
-                    return;
-                }
-
-                // Regular pricing calculation
-                const deliveryType = document.getElementById('delivery-type').value;
-                const includePrinting = document.getElementById('include-printing').checked;
-                const newCustomer = document.getElementById('new-customer').checked;
-                const annualContract = document.getElementById('annual-contract').checked;
-                const includeSourceFiles = document.getElementById('source-files').checked;
-
-                const areaType = this.getAreaType(this.selectedArea);
-                this.updateAreaIndicator(areaType);
-
-                // Calculate distribution cost
-                const isExtended = areaType && areaType.includes('extended');
-                const baseAreaType = areaType ? areaType.replace('-extended', '') : 'standard';
-                const quantityTier = this.getQuantityTier(quantity);
-
-                let distributionPrice = this.pricingData[baseAreaType][deliveryType][quantityTier];
-                if (isExtended) {
-                    distributionPrice += 8;
-                }
-
-                const distributionTotal = (distributionPrice * quantity / 1000);
-
-                // Calculate design cost
-                let designCost = 0;
-                if (this.currentDesign === 'single') designCost = 50;
-                if (this.currentDesign === 'double') designCost = 75;
-                if (this.currentDesign === 'bifold') designCost = 90;
-                if (includeSourceFiles && this.currentDesign !== 'none') designCost += 25;
-
-                // Calculate printing cost
-                let printingCost = 0;
-                let printingComplete = this.isPrintingComplete();
-                
-                if (includePrinting && printingComplete) {
-                    const paperSize = document.getElementById('paper-size').value;
-                    const paperStock = document.getElementById('paper-stock').value;
-                    const doubleSided = document.getElementById('print-sides').value === 'double';
-                    printingCost = this.getPrintingPrice(quantity, paperSize, paperStock, doubleSided);
-                }
-
-                // Show/hide printing incomplete warning
-                const incompleteWarning = document.getElementById('printing-incomplete');
-                if (includePrinting && !printingComplete) {
-                    incompleteWarning.style.display = 'block';
-                } else {
-                    incompleteWarning.style.display = 'none';
-                }
-
-                this.checkDesignPrintMismatch();
-
-                // Apply discounts (ONLY to distribution)
-                let discountAmount = 0;
-                let discountPercent = 0;
-                let discountLabel = '';
-
-                if (this.isDistributionOffer) {
-                    // 50% off distribution - overrides other discounts
-                    discountPercent = 50;
-                    discountLabel = '50%';
-                } else if (newCustomer && annualContract) {
-                    discountPercent = 25;
-                    discountLabel = '25%';
-                } else if (newCustomer) {
-                    discountPercent = 15;
-                    discountLabel = '15%';
-                } else if (annualContract) {
-                    discountPercent = 12;
-                    discountLabel = '12%';
-                }
-
-                if (discountPercent > 0) {
-                    discountAmount = distributionTotal * (discountPercent / 100);
-                }
-
-                const discountedDistribution = distributionTotal - discountAmount;
-                const finalTotal = discountedDistribution + designCost + printingCost;
-                const totalWithVAT = finalTotal * 1.2;
-
-                this.updateCombinedDiscountDisplay();
-                this.updateBreakdownDisplay(distributionTotal, designCost, printingCost, printingComplete, discountAmount, discountLabel, finalTotal, totalWithVAT, quantity);
-                
-                this.isCalculating = false;
             }
 
-            // Enhanced quote saving functionality
+            // FIXED: Enhanced quote saving with better error handling
             saveQuote() {
                 try {
                     let quantity, deliveryType, selectedAreaText, totalCost, totalWithVAT;
@@ -2376,7 +2335,7 @@
                         selectedAreaText = this.multiAreas.map(area => `${area.area} (${area.quantity.toLocaleString()})`).join(', ');
                     } else {
                         const quantityValue = this.validateQuantity(document.getElementById('quantity').value, false);
-                        quantity = quantityValue.toLocaleString();
+                        quantity = Math.max(quantityValue, 1000).toLocaleString();
                         deliveryType = document.getElementById('delivery-type').value === 'standard' ? 'Standard Delivery' : 'Solus Delivery';
                         selectedAreaText = this.selectedArea;
                     }
@@ -2437,23 +2396,47 @@ Contact: 01752 546 123
 Email: info@pdqleaflets.co.uk
 Web: pdqleaflets.co.uk`;
 
-                    // Copy to clipboard
-                    navigator.clipboard.writeText(quoteText).then(() => {
-                        this.showSavedNotification();
-                    }).catch(() => {
-                        // Fallback for older browsers
-                        const textArea = document.createElement('textarea');
-                        textArea.value = quoteText;
-                        document.body.appendChild(textArea);
-                        textArea.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(textArea);
-                        this.showSavedNotification();
-                    });
+                    // Copy to clipboard with fallback
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(quoteText).then(() => {
+                            this.showSavedNotification();
+                        }).catch(() => {
+                            this.fallbackCopyToClipboard(quoteText);
+                        });
+                    } else {
+                        this.fallbackCopyToClipboard(quoteText);
+                    }
                     
                 } catch (error) {
                     console.error('Error saving quote:', error);
                     alert('Failed to save quote. Please try again or call us at 01752 546 123.');
+                }
+            }
+
+            // FIXED: Better fallback for clipboard copying
+            fallbackCopyToClipboard(text) {
+                try {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-999999px';
+                    textArea.style.top = '-999999px';
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    
+                    const successful = document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    if (successful) {
+                        this.showSavedNotification();
+                    } else {
+                        throw new Error('Copy command failed');
+                    }
+                } catch (err) {
+                    console.error('Fallback copy failed:', err);
+                    // Show quote text in alert as last resort
+                    alert('Unable to copy to clipboard. Here is your quote:\n\n' + text);
                 }
             }
 
@@ -2466,23 +2449,32 @@ Web: pdqleaflets.co.uk`;
                 }, 3000);
             }
 
-            // Enhanced quote request with better error handling
+            // FIXED: Enhanced quote request with better error handling and validation
             requestQuote() {
                 try {
+                    // Validate that we have minimum required information
+                    const quantity = this.isMultiArea ? 
+                        this.multiAreas.reduce((sum, area) => sum + area.quantity, 0) : 
+                        this.validateQuantity(document.getElementById('quantity').value, false);
+                        
+                    if (quantity < 1000) {
+                        alert('Please enter a valid quantity of at least 1,000 leaflets before requesting a quote.');
+                        return;
+                    }
+
                     const btn = document.getElementById('request-quote-btn');
                     btn.classList.add('loading');
                     btn.disabled = true;
 
-                    let quantity, deliveryType, selectedAreaText;
+                    let deliveryType, selectedAreaText;
                     
                     if (this.isMultiArea) {
                         const totalQuantity = this.multiAreas.reduce((sum, area) => sum + area.quantity, 0);
-                        quantity = totalQuantity.toLocaleString();
+                        const quantityText = totalQuantity.toLocaleString();
                         deliveryType = document.getElementById('multi-delivery-type').value === 'standard' ? 'Standard Delivery' : 'Solus Delivery';
                         selectedAreaText = this.multiAreas.map(area => `${area.area} (${area.quantity.toLocaleString()})`).join(', ');
                     } else {
-                        const quantityValue = this.validateQuantity(document.getElementById('quantity').value, false);
-                        quantity = quantityValue.toLocaleString();
+                        const quantityText = Math.max(quantity, 1000).toLocaleString();
                         deliveryType = document.getElementById('delivery-type').value === 'standard' ? 'Standard Delivery' : 'Solus Delivery';
                         selectedAreaText = this.selectedArea;
                     }
@@ -2531,7 +2523,9 @@ Web: pdqleaflets.co.uk`;
                     
                     const formParams = new URLSearchParams({
                         'entry.470958436': selectedAreaText,
-                        'entry.579439748': quantity,
+                        'entry.579439748': this.isMultiArea ? 
+                            this.multiAreas.reduce((sum, area) => sum + area.quantity, 0).toLocaleString() : 
+                            Math.max(quantity, 1000).toLocaleString(),
                         'entry.2016134755': deliveryType,
                         'entry.1152225761': designInfo,
                         'entry.1643154630': printingInfo,
@@ -2540,12 +2534,21 @@ Web: pdqleaflets.co.uk`;
                     });
                     
                     const finalURL = `${googleFormURL}?${formParams.toString()}`;
-                    const newWindow = window.open(finalURL, '_blank');
                     
-                    // Check if popup was blocked
-                    if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-                        throw new Error('Popup blocked');
+                    // Try to open new window with better error handling
+                    let newWindow;
+                    try {
+                        newWindow = window.open(finalURL, '_blank', 'noopener,noreferrer');
+                    } catch (e) {
+                        throw new Error('Unable to open popup window');
                     }
+                    
+                    // Check if popup was blocked with timeout
+                    setTimeout(() => {
+                        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+                            throw new Error('Popup blocked by browser');
+                        }
+                    }, 100);
                     
                     btn.textContent = '✅ Opening quote form...';
                     btn.style.background = '#10b981';
@@ -2575,151 +2578,182 @@ Web: pdqleaflets.co.uk`;
                 }
             }
 
-            // Enhanced event listener management to prevent memory leaks
-            addEventListener(element, event, handler) {
-                if (element && typeof handler === 'function') {
-                    element.addEventListener(event, handler);
-                    
-                    const key = element.id + '_' + event;
-                    if (!this.eventListeners.has(key)) {
-                        this.eventListeners.set(key, []);
-                    }
-                    this.eventListeners.get(key).push({ element, event, handler });
-                }
-            }
-
-            removeEventListener(element, event) {
-                const key = element.id + '_' + event;
-                const listeners = this.eventListeners.get(key);
-                if (listeners) {
-                    listeners.forEach(({ element, event, handler }) => {
-                        element.removeEventListener(event, handler);
-                    });
-                    this.eventListeners.delete(key);
-                }
-            }
-
-            // Clean up all event listeners
-            cleanup() {
-                this.eventListeners.forEach((listeners) => {
-                    listeners.forEach(({ element, event, handler }) => {
-                        element.removeEventListener(event, handler);
-                    });
-                });
-                this.eventListeners.clear();
-            }
-
+            // FIXED: Enhanced event listener initialization with better error handling
             initializeEventListeners() {
-                // Form change listeners with proper context binding
-                this.addEventListener(document.getElementById('quantity'), 'input', () => this.debouncedCalculate());
-                this.addEventListener(document.getElementById('quantity'), 'blur', () => this.debouncedCalculate());
-                this.addEventListener(document.getElementById('delivery-type'), 'change', () => this.debouncedCalculate());
-                this.addEventListener(document.getElementById('extended-areas'), 'change', () => this.setExtendedArea());
-                this.addEventListener(document.getElementById('multi-area-mode'), 'change', () => this.toggleMultiArea());
-                this.addEventListener(document.getElementById('multi-delivery-type'), 'change', () => {
-                    this.multiAreas.forEach(area => this.updateMultiArea(area.id));
-                });
-                this.addEventListener(document.getElementById('include-printing'), 'change', () => this.togglePrintingOptions());
-                
-                // Printing option listeners with bi-fold auto-selection
-                ['paper-size', 'paper-stock', 'paper-finish', 'print-sides'].forEach(id => {
-                    this.addEventListener(document.getElementById(id), 'change', () => {
-                        if (id === 'paper-size') {
-                            this.handlePaperSizeChange();
+                try {
+                    // Use more robust event binding
+                    const elements = {
+                        quantity: document.getElementById('quantity'),
+                        deliveryType: document.getElementById('delivery-type'),
+                        extendedAreas: document.getElementById('extended-areas'),
+                        multiAreaMode: document.getElementById('multi-area-mode'),
+                        multiDeliveryType: document.getElementById('multi-delivery-type'),
+                        includePrinting: document.getElementById('include-printing'),
+                        newCustomer: document.getElementById('new-customer'),
+                        annualContract: document.getElementById('annual-contract'),
+                        sourceFiles: document.getElementById('source-files')
+                    };
+
+                    // Quantity input with improved handling
+                    if (elements.quantity) {
+                        elements.quantity.addEventListener('input', () => this.debouncedCalculate());
+                        elements.quantity.addEventListener('blur', () => {
+                            const value = this.validateQuantity(elements.quantity.value);
+                            if (value >= 1000 && value !== parseInt(elements.quantity.value)) {
+                                elements.quantity.value = value;
+                            }
+                            this.debouncedCalculate();
+                        });
+                    }
+
+                    if (elements.deliveryType) {
+                        elements.deliveryType.addEventListener('change', () => this.debouncedCalculate());
+                    }
+
+                    if (elements.extendedAreas) {
+                        elements.extendedAreas.addEventListener('change', () => this.setExtendedArea());
+                    }
+
+                    if (elements.multiAreaMode) {
+                        elements.multiAreaMode.addEventListener('change', () => this.toggleMultiArea());
+                    }
+
+                    if (elements.multiDeliveryType) {
+                        elements.multiDeliveryType.addEventListener('change', () => {
+                            this.multiAreas.forEach(area => this.updateMultiArea(area.id));
+                        });
+                    }
+
+                    if (elements.includePrinting) {
+                        elements.includePrinting.addEventListener('change', () => this.togglePrintingOptions());
+                    }
+                    
+                    // Printing option listeners
+                    ['paper-size', 'paper-stock', 'paper-finish', 'print-sides'].forEach(id => {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            element.addEventListener('change', () => {
+                                if (id === 'paper-size') {
+                                    this.handlePaperSizeChange();
+                                }
+                                this.checkDesignPrintMismatch();
+                                this.debouncedCalculate();
+                            });
                         }
-                        this.checkDesignPrintMismatch();
-                        this.debouncedCalculate();
                     });
-                });
-                
-                // Discount listeners - modified to handle distribution offer
-                this.addEventListener(document.getElementById('new-customer'), 'change', () => {
-                    if (this.isDistributionOffer) {
-                        document.getElementById('new-customer').checked = false;
-                        return;
+                    
+                    // Discount listeners with distribution offer handling
+                    if (elements.newCustomer) {
+                        elements.newCustomer.addEventListener('change', () => {
+                            if (this.isDistributionOffer) {
+                                elements.newCustomer.checked = false;
+                                return;
+                            }
+                            this.updateCombinedDiscountDisplay();
+                            this.debouncedCalculate();
+                        });
                     }
-                    this.updateCombinedDiscountDisplay();
-                    this.debouncedCalculate();
-                });
-                this.addEventListener(document.getElementById('annual-contract'), 'change', () => {
-                    if (this.isDistributionOffer) {
-                        document.getElementById('annual-contract').checked = false;
-                        return;
+
+                    if (elements.annualContract) {
+                        elements.annualContract.addEventListener('change', () => {
+                            if (this.isDistributionOffer) {
+                                elements.annualContract.checked = false;
+                                return;
+                            }
+                            this.updateCombinedDiscountDisplay();
+                            this.debouncedCalculate();
+                        });
                     }
-                    this.updateCombinedDiscountDisplay();
-                    this.debouncedCalculate();
-                });
-                this.addEventListener(document.getElementById('source-files'), 'change', () => this.debouncedCalculate());
+
+                    if (elements.sourceFiles) {
+                        elements.sourceFiles.addEventListener('change', () => this.debouncedCalculate());
+                    }
+
+                } catch (error) {
+                    console.error('Error initializing event listeners:', error);
+                }
             }
 
             setInitialState() {
-                document.querySelector('[onclick="setPostcode(\'PL2\')"]').classList.add('selected');
-                this.selectedArea = 'PL2';
-                
-                const quantityInput = document.getElementById('quantity');
-                if (!quantityInput.value) quantityInput.value = '1000';
+                try {
+                    const defaultButton = document.querySelector('[onclick="setPostcode(\'PL2\')"]');
+                    if (defaultButton) {
+                        defaultButton.classList.add('selected');
+                    }
+                    this.selectedArea = 'PL2';
+                    
+                    const quantityInput = document.getElementById('quantity');
+                    if (quantityInput && !quantityInput.value) {
+                        quantityInput.value = '1000';
+                    }
+                } catch (error) {
+                    console.error('Error setting initial state:', error);
+                }
             }
         }
 
-        // Global functions for onclick handlers (maintain backward compatibility)
+        // Global functions for onclick handlers
         let calculator;
 
         function setPostcode(areaCode) {
-            calculator.setPostcode(areaCode);
+            if (calculator) calculator.setPostcode(areaCode);
         }
 
         function setExtendedArea() {
-            calculator.setExtendedArea();
+            if (calculator) calculator.setExtendedArea();
         }
 
         function selectDesign(type) {
-            calculator.selectDesign(type);
+            if (calculator) calculator.selectDesign(type);
         }
 
         function setCheapestOption() {
-            calculator.setCheapestOption();
+            if (calculator) calculator.setCheapestOption();
         }
 
         function applySpecialOffer() {
-            calculator.applySpecialOffer();
+            if (calculator) calculator.applySpecialOffer();
         }
 
         function applyDistributionOffer() {
-            calculator.applyDistributionOffer();
+            if (calculator) calculator.applyDistributionOffer();
         }
 
         function togglePrintingOptions() {
-            calculator.togglePrintingOptions();
+            if (calculator) calculator.togglePrintingOptions();
         }
 
         function addArea() {
-            calculator.addArea();
+            if (calculator) calculator.addArea();
         }
 
         function requestQuote() {
-            calculator.requestQuote();
+            if (calculator) calculator.requestQuote();
         }
 
         function saveQuote() {
-            calculator.saveQuote();
+            if (calculator) calculator.saveQuote();
         }
 
-        // Initialize calculator when DOM is ready
+        // FIXED: Enhanced initialization with better error handling
         document.addEventListener('DOMContentLoaded', function() {
             try {
                 calculator = new QuoteCalculator();
-                console.log('Enhanced PDQ Calculator with 50% Distribution Offer loaded successfully');
+                console.log('Fixed PDQ Calculator loaded successfully with all bug fixes applied');
             } catch (error) {
-                console.error('Error initializing Enhanced PDQ Calculator:', error);
-                // Fallback to basic functionality if enhanced version fails
-                alert('Calculator is running in basic mode. Some features may be limited. Please refresh the page or contact support.');
+                console.error('Error initializing Fixed PDQ Calculator:', error);
+                alert('Calculator initialization failed. Please refresh the page or contact support at 01752 546 123.');
             }
         });
 
-        // Cleanup on page unload to prevent memory leaks
+        // Enhanced cleanup on page unload
         window.addEventListener('beforeunload', function() {
-            if (calculator && typeof calculator.cleanup === 'function') {
-                calculator.cleanup();
+            try {
+                if (calculator && calculator.debounceTimer) {
+                    clearTimeout(calculator.debounceTimer);
+                }
+            } catch (error) {
+                console.error('Error during cleanup:', error);
             }
         });
     </script>
