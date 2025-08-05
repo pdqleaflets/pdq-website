@@ -1090,7 +1090,7 @@
             <div class="calculator-header">
                 <h1>Get Your Instant Quote</h1>
                 <p>Configure your leaflet campaign below to see real-time pricing for distribution, design, and printing services.</p>
-                <p><i>Prices displayed are for reference only.</i></p>
+                <p><i>Prices shown are for reference only.</i></p>
             </div>
 
             <!-- Distribution Settings -->
@@ -1581,32 +1581,53 @@
                 }
             }
 
-            // FIXED: Enhanced combined discount display with better state management
+            // FIXED: Enhanced combined discount display with better state management and debugging
             updateCombinedDiscountDisplay() {
-                const newCustomer = document.getElementById('new-customer').checked;
-                const annualContract = document.getElementById('annual-contract').checked;
-                const combinedInfo = document.getElementById('combined-discount-info');
-                const distributionDiscountActive = document.getElementById('distribution-discount-active');
-                
-                if (this.isDistributionOffer) {
-                    combinedInfo.style.display = 'none';
-                    distributionDiscountActive.style.display = 'block';
+                try {
+                    const newCustomerEl = document.getElementById('new-customer');
+                    const annualContractEl = document.getElementById('annual-contract');
+                    const combinedInfo = document.getElementById('combined-discount-info');
+                    const distributionDiscountActive = document.getElementById('distribution-discount-active');
                     
-                    // Disable other discount checkboxes when distribution offer is active
-                    document.getElementById('new-customer-group').classList.add('disabled');
-                    document.getElementById('annual-contract-group').classList.add('disabled');
-                    document.getElementById('new-customer').checked = false;
-                    document.getElementById('annual-contract').checked = false;
-                } else {
-                    distributionDiscountActive.style.display = 'none';
-                    document.getElementById('new-customer-group').classList.remove('disabled');
-                    document.getElementById('annual-contract-group').classList.remove('disabled');
-                    
-                    if (newCustomer && annualContract) {
-                        combinedInfo.style.display = 'block';
-                    } else {
-                        combinedInfo.style.display = 'none';
+                    if (!newCustomerEl || !annualContractEl || !combinedInfo || !distributionDiscountActive) {
+                        console.error('Discount elements not found');
+                        return;
                     }
+                    
+                    const newCustomer = newCustomerEl.checked;
+                    const annualContract = annualContractEl.checked;
+                    
+                    console.log('Updating discount display:', { 
+                        newCustomer, 
+                        annualContract, 
+                        isDistributionOffer: this.isDistributionOffer 
+                    });
+                    
+                    if (this.isDistributionOffer) {
+                        combinedInfo.style.display = 'none';
+                        distributionDiscountActive.style.display = 'block';
+                        
+                        // Disable other discount checkboxes when distribution offer is active
+                        document.getElementById('new-customer-group').classList.add('disabled');
+                        document.getElementById('annual-contract-group').classList.add('disabled');
+                        
+                        // Uncheck other discounts when distribution offer is active
+                        if (newCustomerEl.checked) newCustomerEl.checked = false;
+                        if (annualContractEl.checked) annualContractEl.checked = false;
+                    } else {
+                        distributionDiscountActive.style.display = 'none';
+                        document.getElementById('new-customer-group').classList.remove('disabled');
+                        document.getElementById('annual-contract-group').classList.remove('disabled');
+                        
+                        if (newCustomer && annualContract) {
+                            combinedInfo.style.display = 'block';
+                            console.log('Showing combined discount info');
+                        } else {
+                            combinedInfo.style.display = 'none';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error updating combined discount display:', error);
                 }
             }
 
@@ -2654,11 +2675,14 @@ Web: pdqleaflets.co.uk`;
                         }
                     });
                     
-                    // Discount listeners with distribution offer handling
+                    // FIXED: Discount listeners with proper handling
                     if (elements.newCustomer) {
-                        elements.newCustomer.addEventListener('change', () => {
-                            if (this.isDistributionOffer) {
-                                elements.newCustomer.checked = false;
+                        elements.newCustomer.addEventListener('change', (e) => {
+                            console.log('New customer checkbox changed:', e.target.checked);
+                            // Don't prevent the change if distribution offer is active, just uncheck it
+                            if (this.isDistributionOffer && e.target.checked) {
+                                console.log('Distribution offer is active, unchecking new customer');
+                                e.target.checked = false;
                                 return;
                             }
                             this.updateCombinedDiscountDisplay();
@@ -2667,9 +2691,12 @@ Web: pdqleaflets.co.uk`;
                     }
 
                     if (elements.annualContract) {
-                        elements.annualContract.addEventListener('change', () => {
-                            if (this.isDistributionOffer) {
-                                elements.annualContract.checked = false;
+                        elements.annualContract.addEventListener('change', (e) => {
+                            console.log('Annual contract checkbox changed:', e.target.checked);
+                            // Don't prevent the change if distribution offer is active, just uncheck it
+                            if (this.isDistributionOffer && e.target.checked) {
+                                console.log('Distribution offer is active, unchecking annual contract');
+                                e.target.checked = false;
                                 return;
                             }
                             this.updateCombinedDiscountDisplay();
@@ -2680,6 +2707,8 @@ Web: pdqleaflets.co.uk`;
                     if (elements.sourceFiles) {
                         elements.sourceFiles.addEventListener('change', () => this.debouncedCalculate());
                     }
+
+                    console.log('Event listeners initialized successfully');
 
                 } catch (error) {
                     console.error('Error initializing event listeners:', error);
