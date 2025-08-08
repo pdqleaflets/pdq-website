@@ -14,11 +14,11 @@
                         <a href="quote.html" class="cta-nav">Quote</a>
                     </li>
                 </ul>
-                <div class="mobile-menu-btn">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <span></span>
                     <span></span>
                     <span></span>
-                </div>
+                </button>
             </nav>
         </header><!doctype html>
 <html lang="en">
@@ -169,6 +169,8 @@
                 flex-direction: column;
                 cursor: pointer;
                 padding: 8px;
+                background: none;  
+                border: none; 
             }
 
             .mobile-menu-btn span {
@@ -1405,24 +1407,25 @@
                 });
 
             // Mobile menu functionality
-            const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
-            const navLinks = document.querySelector(".nav-links");
+    	    // Mobile menu functionality
+        	const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+		const navLinks = document.querySelector(".nav-links");
 
-            if (mobileMenuBtn && navLinks) {
-                mobileMenuBtn.addEventListener("click", function () {
-                    navLinks.style.display =
-                        navLinks.style.display === "flex" ? "none" : "flex";
-                    navLinks.style.flexDirection = "column";
-                    navLinks.style.position = "absolute";
-                    navLinks.style.top = "100%";
-                    navLinks.style.left = "0";
-                    navLinks.style.right = "0";
-                    navLinks.style.background = "white";
-                    navLinks.style.padding = "2rem";
-                    navLinks.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.12)";
-                    navLinks.style.borderRadius = "0 0 20px 20px";
-                });
-            }
+		if (mobileMenuBtn && navLinks) {
+   			mobileMenuBtn.addEventListener("click", function () {
+        			navLinks.style.display =
+            				navLinks.style.display === "flex" ? "none" : "flex";
+        			navLinks.style.flexDirection = "column";
+        			navLinks.style.position = "absolute";
+        			navLinks.style.top = "100%";
+        			navLinks.style.left = "0";
+        			navLinks.style.right = "0";
+        			navLinks.style.background = "white";
+        			navLinks.style.padding = "2rem";
+        			navLinks.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.12)";
+        			navLinks.style.borderRadius = "0 0 20px 20px";
+    });
+}
 
             // Chat Widget Configuration
             const CHAT_CONFIG = {
